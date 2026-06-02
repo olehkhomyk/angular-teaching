@@ -31,11 +31,13 @@
       @if (selectedAppointment(); as appt) {
         <app-appointment-preview [appointment]="appt" />
       } @else {
-        <div class="empty-state">
-          <mat-icon class="empty-icon">touch_app</mat-icon>
-          <h2>Оберіть прийом</h2>
-          <p>Натисніть на рядок зліва, щоб побачити деталі</p>
-        </div>
+        <mat-card-content>
+          <div class="empty-state">
+            <mat-icon class="empty-icon">touch_app</mat-icon>
+            <h2>Оберіть прийом</h2>
+            <p>Натисніть на рядок зліва, щоб побачити деталі</p>
+          </div>
+        </mat-card-content>
       }
 
     </mat-card>
