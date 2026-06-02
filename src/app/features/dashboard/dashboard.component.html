@@ -24,23 +24,20 @@
     </mat-card>
   </section>
 
-  <!-- Right column: detail placeholder -->
+  <!-- Right column -->
   <section class="detail-column">
-    <mat-card appearance="outlined" class="detail-placeholder">
-      @if (selectedAppointmentId()) {
-        <div class="detail-content">
-          <mat-icon class="detail-icon">medical_services</mat-icon>
-          <h2>Деталі прийому</h2>
-          <p class="coming">Appointment detail — coming in Phase 2</p>
-          <p class="appt-id">ID: {{ selectedAppointmentId() }}</p>
-        </div>
+    <mat-card appearance="outlined" class="detail-card">
+
+      @if (selectedAppointment(); as appt) {
+        <app-appointment-preview [appointment]="appt" />
       } @else {
-        <div class="detail-content">
-          <mat-icon class="detail-icon">touch_app</mat-icon>
+        <div class="empty-state">
+          <mat-icon class="empty-icon">touch_app</mat-icon>
           <h2>Оберіть прийом</h2>
-          <p class="coming">Натисніть на рядок зліва, щоб побачити деталі</p>
+          <p>Натисніть на рядок зліва, щоб побачити деталі</p>
         </div>
       }
+
     </mat-card>
   </section>
 

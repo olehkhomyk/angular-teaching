@@ -10,9 +10,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { AppointmentsService } from '../../core/services/appointments.service';
-import { PatientInfoComponent } from './components/patient-info/patient-info.component';
-import { AppointmentFormComponent } from './components/appointment-form/appointment-form.component';
-import { AppointmentStatusBadgeComponent } from '../dashboard/components/appointment-status-badge/appointment-status-badge.component';
+import { PatientInfoComponent } from './ui/patient-info/patient-info.component';
+import { AppointmentFormComponent } from './ui/appointment-form/appointment-form.component';
+import { AppointmentStatusBadgeComponent } from '../../shared/ui/appointment-status-badge/appointment-status-badge.component';
 
 @Component({
   selector: 'app-appointment-detail',

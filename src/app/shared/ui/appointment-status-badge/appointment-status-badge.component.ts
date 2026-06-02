@@ -1,6 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import { MatChipsModule } from '@angular/material/chips';
-import { AppointmentStatus } from '../../../../core/models/patient.model';
+import { AppointmentStatus } from '../../../core/models/patient.model';
 
 @Component({
   selector: 'app-appointment-status-badge',

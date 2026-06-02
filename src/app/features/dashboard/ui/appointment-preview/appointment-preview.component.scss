@@ -1,0 +1,38 @@
+.preview-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.preview-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.preview-icon {
+  color: var(--mat-sys-on-surface-variant);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.preview-label {
+  font: var(--mat-sys-label-small);
+  color: var(--mat-sys-on-surface-variant);
+  margin-bottom: 2px;
+}
+
+.preview-value {
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface);
+}
+
+.preview-notes {
+  margin: 0;
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
+  font-style: italic;
+  line-height: 1.5;
+}

@@ -1,10 +1,9 @@
 import { Component, input, output } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { DatePipe } from '@angular/common';
 import { Appointment } from '../../../../core/models/patient.model';
-import { AppointmentStatusBadgeComponent } from '../appointment-status-badge/appointment-status-badge.component';
+import { AppointmentStatusBadgeComponent } from '../../../../shared/ui/appointment-status-badge/appointment-status-badge.component';
 
 const TYPE_LABEL: Record<string, string> = {
   consultation: 'Консультація',
@@ -15,7 +14,7 @@ const TYPE_LABEL: Record<string, string> = {
 @Component({
   selector: 'app-patient-list',
   standalone: true,
-  imports: [RouterLink, MatIconModule, MatDividerModule, DatePipe, AppointmentStatusBadgeComponent],
+  imports: [MatIconModule, MatDividerModule, DatePipe, AppointmentStatusBadgeComponent],
   templateUrl: './patient-list.component.html',
   styleUrl: './patient-list.component.scss',
 })

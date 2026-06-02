@@ -15,4 +15,8 @@
   gap: 32px;
   flex-wrap: wrap;
   padding-bottom: 8px;
+
+  ::ng-deep mat-slide-toggle label {
+    padding-left: 10px;
+  }
 }

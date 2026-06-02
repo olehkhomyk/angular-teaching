@@ -4,12 +4,19 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { AppointmentsService } from '../../core/services/appointments.service';
-import { PatientListComponent } from './components/patient-list/patient-list.component';
+import { PatientListComponent } from './ui/patient-list/patient-list.component';
+import { AppointmentPreviewComponent } from './ui/appointment-preview/appointment-preview.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [MatProgressSpinnerModule, MatCardModule, MatIconModule, PatientListComponent],
+  imports: [
+    MatProgressSpinnerModule,
+    MatCardModule,
+    MatIconModule,
+    PatientListComponent,
+    AppointmentPreviewComponent,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
@@ -24,6 +31,10 @@ export class DashboardComponent {
   isLoading = computed(() => this.appointments().length === 0);
 
   selectedAppointmentId = signal<string | null>(null);
+
+  selectedAppointment = computed(() =>
+    this.appointments().find(a => a.id === this.selectedAppointmentId()) ?? null,
+  );
 
   onSelectAppointment(id: string): void {
     this.selectedAppointmentId.set(id);
