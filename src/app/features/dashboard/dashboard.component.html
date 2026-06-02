@@ -1,0 +1,47 @@
+<div class="dashboard-layout">
+
+  <!-- Left column: appointment list -->
+  <section class="list-column">
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>Прийоми пацієнтів</mat-card-title>
+        <mat-card-subtitle>Тиждень</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        @if (isLoading()) {
+          <div class="spinner-wrap">
+            <mat-progress-spinner mode="indeterminate" diameter="48" />
+          </div>
+        } @else {
+          <app-patient-list
+            [appointments]="appointments()"
+            [selectedId]="selectedAppointmentId()"
+            (selectAppointment)="onSelectAppointment($event)"
+          />
+        }
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+  <!-- Right column: detail placeholder -->
+  <section class="detail-column">
+    <mat-card appearance="outlined" class="detail-placeholder">
+      @if (selectedAppointmentId()) {
+        <div class="detail-content">
+          <mat-icon class="detail-icon">medical_services</mat-icon>
+          <h2>Деталі прийому</h2>
+          <p class="coming">Appointment detail — coming in Phase 2</p>
+          <p class="appt-id">ID: {{ selectedAppointmentId() }}</p>
+        </div>
+      } @else {
+        <div class="detail-content">
+          <mat-icon class="detail-icon">touch_app</mat-icon>
+          <h2>Оберіть прийом</h2>
+          <p class="coming">Натисніть на рядок зліва, щоб побачити деталі</p>
+        </div>
+      }
+    </mat-card>
+  </section>
+
+</div>

@@ -1,0 +1,39 @@
+@for (appt of appointments(); track appt.id) {
+  <div
+    class="patient-row"
+    [class.selected]="selectedId() === appt.id"
+    (click)="selectAppointment.emit(appt.id)"
+    role="button"
+    tabindex="0"
+    (keydown.enter)="selectAppointment.emit(appt.id)"
+  >
+    <div class="row-avatar">
+      @if (appt.patient.avatarUrl) {
+        <img [src]="appt.patient.avatarUrl" [alt]="appt.patient.firstName" class="avatar-img" />
+      } @else {
+        <mat-icon class="avatar-icon">person</mat-icon>
+      }
+    </div>
+
+    <div class="row-body">
+      <div class="row-name">
+        {{ appt.patient.firstName }} {{ appt.patient.lastName }}
+        <span class="age">({{ appt.patient.age }} р.)</span>
+      </div>
+      <div class="row-meta">
+        <span>{{ typeLabel(appt.type) }}</span>
+        <span class="dot">·</span>
+        <span>{{ appt.doctorName }}</span>
+        <span class="dot">·</span>
+        <span>Кабінет {{ appt.room }}</span>
+      </div>
+      <div class="row-date">{{ appt.date | date: 'dd MMM yyyy, HH:mm' }}</div>
+    </div>
+
+    <div class="row-badge">
+      <app-appointment-status-badge [status]="appt.status" />
+    </div>
+  </div>
+
+  <mat-divider />
+}

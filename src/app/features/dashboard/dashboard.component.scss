@@ -1,0 +1,67 @@
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 40fr 60fr;
+  gap: 16px;
+  padding: 16px;
+  min-height: calc(100vh - 64px); // subtract toolbar height
+  box-sizing: border-box;
+}
+
+.list-column mat-card {
+  height: 100%;
+
+  mat-card-content {
+    padding: 0;
+  }
+}
+
+.detail-column {
+  .detail-placeholder {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.detail-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 48px 32px;
+  text-align: center;
+
+  h2 {
+    margin: 0;
+    font: var(--mat-sys-headline-small);
+    color: var(--mat-sys-on-surface);
+  }
+
+  .coming {
+    margin: 0;
+    font: var(--mat-sys-body-medium);
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  .appt-id {
+    margin: 0;
+    font: var(--mat-sys-body-small);
+    color: var(--mat-sys-outline);
+    font-family: monospace;
+  }
+}
+
+.detail-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: var(--mat-sys-outline);
+}
+
+.spinner-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 64px;
+}
