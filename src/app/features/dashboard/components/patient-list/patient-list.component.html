@@ -2,6 +2,7 @@
   <div
     class="patient-row"
     [class.selected]="selectedId() === appt.id"
+    [routerLink]="['/appointment', appt.id]"
     (click)="selectAppointment.emit(appt.id)"
     role="button"
     tabindex="0"

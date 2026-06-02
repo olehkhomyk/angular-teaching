@@ -1,0 +1,341 @@
+<!-- ════════════════════════════════════════════════════
+     CONSULTATION
+     ════════════════════════════════════════════════════ -->
+@if (type() === 'consultation') {
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-icon matCardAvatar>medical_information</mat-icon>
+      <mat-card-title>Консультація</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="form-grid">
+
+      <!-- Visit reason -->
+      <mat-form-field appearance="outline">
+        <mat-label>Причина візиту</mat-label>
+        <mat-select [value]="visitReason()" (valueChange)="visitReason.set($event)">
+          <mat-option value="cold">Застуда / ГРВІ</mat-option>
+          <mat-option value="pain">Больовий синдром</mat-option>
+          <mat-option value="checkup">Профілактичний огляд</mat-option>
+          <mat-option value="other">Інше</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Follow-up toggle + days (same row) -->
+      <div class="toggle-row">
+        <mat-slide-toggle
+          [checked]="needsFollowUp()"
+          (change)="needsFollowUp.set($event.checked)"
+        >
+          Потрібен повторний прийом
+        </mat-slide-toggle>
+
+        @if (needsFollowUp()) {
+          <mat-form-field appearance="outline" class="follow-up-days">
+            <mat-label>Через</mat-label>
+            <mat-select [value]="followUpDays()" (valueChange)="followUpDays.set($event)">
+              <mat-option [value]="7">7 днів</mat-option>
+              <mat-option [value]="14">14 днів</mat-option>
+              <mat-option [value]="30">30 днів</mat-option>
+            </mat-select>
+          </mat-form-field>
+        }
+      </div>
+
+      <!-- Complaints -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Скарги пацієнта</mat-label>
+        <textarea
+          matInput
+          rows="3"
+          placeholder="Опишіть скарги..."
+          [value]="complaints()"
+          (input)="complaints.set($any($event.target).value)"
+        ></textarea>
+      </mat-form-field>
+
+      <!-- Diagnosis -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Діагноз</mat-label>
+        <textarea
+          matInput
+          rows="3"
+          placeholder="Діагноз лікаря..."
+          [value]="diagnosis()"
+          (input)="diagnosis.set($any($event.target).value)"
+        ></textarea>
+      </mat-form-field>
+
+      <!-- Medications chips -->
+      <div class="chip-section full-width">
+        <label class="chip-label">Призначені препарати</label>
+        <mat-chip-grid #medicationGrid aria-label="Препарати">
+          @for (med of medications(); track med; let i = $index) {
+            <mat-chip-row (removed)="removeMedication(i)">
+              {{ med }}
+              <button matChipRemove aria-label="Видалити">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+          }
+        </mat-chip-grid>
+        <mat-form-field appearance="outline" class="chip-input">
+          <mat-label>Додати препарат</mat-label>
+          <input
+            matInput
+            #medInput
+            placeholder="Назва препарату..."
+            [matChipInputFor]="medicationGrid"
+            (keydown.enter)="addMedication(medInput)"
+            (keydown.comma)="addMedication(medInput)"
+          />
+        </mat-form-field>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+}
+
+<!-- ════════════════════════════════════════════════════
+     EXAMINATION
+     ════════════════════════════════════════════════════ -->
+@if (type() === 'examination') {
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-icon matCardAvatar>biotech</mat-icon>
+      <mat-card-title>Обстеження</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="form-grid">
+
+      <!-- Examination type -->
+      <mat-form-field appearance="outline">
+        <mat-label>Тип обстеження</mat-label>
+        <mat-select [value]="examinationType()" (valueChange)="examinationType.set($event)">
+          <mat-option value="blood">Аналіз крові</mat-option>
+          <mat-option value="ultrasound">УЗД</mat-option>
+          <mat-option value="mri">МРТ</mat-option>
+          <mat-option value="ecg">ЕКГ</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Referral number -->
+      <mat-form-field appearance="outline">
+        <mat-label>Номер направлення</mat-label>
+        <input
+          matInput
+          placeholder="REF-2026-..."
+          [value]="referralNumber()"
+          (input)="referralNumber.set($any($event.target).value)"
+        />
+        <mat-icon matSuffix>assignment</mat-icon>
+      </mat-form-field>
+
+      <!-- Toggles -->
+      <div class="toggles full-width">
+        <mat-slide-toggle
+          [checked]="isFasting()"
+          (change)="isFasting.set($event.checked)"
+        >
+          Пацієнт натще
+        </mat-slide-toggle>
+
+        <mat-slide-toggle
+          [checked]="resultsReceived()"
+          (change)="resultsReceived.set($event.checked)"
+        >
+          Результати отримані
+        </mat-slide-toggle>
+      </div>
+
+      <!-- Results table -->
+      <div class="table-section full-width">
+        <div class="table-header">
+          <span class="table-label">Результати аналізів</span>
+          <button mat-stroked-button (click)="addExamResult()">
+            <mat-icon>add</mat-icon> Рядок
+          </button>
+        </div>
+
+        @if (examResults().length > 0) {
+          <table mat-table [dataSource]="examResults()" class="results-table">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Показник</th>
+              <td mat-cell *matCellDef="let row; let i = index">
+                <input
+                  class="table-input"
+                  [value]="row.name"
+                  (input)="updateExamResult(i, 'name', $any($event.target).value)"
+                  placeholder="Гемоглобін..."
+                />
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="value">
+              <th mat-header-cell *matHeaderCellDef>Значення</th>
+              <td mat-cell *matCellDef="let row; let i = index">
+                <input
+                  class="table-input"
+                  [value]="row.value"
+                  (input)="updateExamResult(i, 'value', $any($event.target).value)"
+                  placeholder="130 г/л"
+                />
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="norm">
+              <th mat-header-cell *matHeaderCellDef>Норма</th>
+              <td mat-cell *matCellDef="let row; let i = index">
+                <input
+                  class="table-input"
+                  [value]="row.norm"
+                  (input)="updateExamResult(i, 'norm', $any($event.target).value)"
+                  placeholder="120–160 г/л"
+                />
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let row; let i = index">
+                <button mat-icon-button (click)="removeExamResult(i)" aria-label="Видалити рядок">
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="examResultColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: examResultColumns;"></tr>
+          </table>
+        }
+      </div>
+
+      <!-- Conclusion — shown only when resultsReceived -->
+      @if (resultsReceived()) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Висновок</mat-label>
+          <textarea
+            matInput
+            rows="4"
+            placeholder="Висновок лікаря за результатами..."
+            [value]="conclusion()"
+            (input)="conclusion.set($any($event.target).value)"
+          ></textarea>
+        </mat-form-field>
+      }
+
+    </mat-card-content>
+  </mat-card>
+}
+
+<!-- ════════════════════════════════════════════════════
+     SURGERY
+     ════════════════════════════════════════════════════ -->
+@if (type() === 'surgery') {
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-icon matCardAvatar>emergency</mat-icon>
+      <mat-card-title>Операція</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="form-grid">
+
+      <!-- Anesthesia type -->
+      <mat-form-field appearance="outline">
+        <mat-label>Тип анестезії</mat-label>
+        <mat-select [value]="anesthesiaType()" (valueChange)="anesthesiaType.set($event)">
+          <mat-option value="general">Загальна</mat-option>
+          <mat-option value="local">Місцева</mat-option>
+          <mat-option value="spinal">Спінальна</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Duration -->
+      <mat-form-field appearance="outline">
+        <mat-label>Тривалість операції</mat-label>
+        <input
+          matInput
+          type="number"
+          min="1"
+          [value]="durationMinutes() ?? ''"
+          (input)="setDuration($any($event.target).value)"
+          placeholder="90"
+        />
+        <span matSuffix>хв</span>
+      </mat-form-field>
+
+      <!-- Operating room -->
+      <mat-form-field appearance="outline">
+        <mat-label>Операційна зала</mat-label>
+        <mat-select [value]="operatingRoom()" (valueChange)="operatingRoom.set($event)">
+          <mat-option value="or1">Зала 1</mat-option>
+          <mat-option value="or2">Зала 2</mat-option>
+          <mat-option value="or3">Зала 3</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Toggles -->
+      <div class="toggles full-width">
+        <mat-slide-toggle
+          [checked]="surgeryIsFasting()"
+          (change)="surgeryIsFasting.set($event.checked)"
+        >
+          Пацієнт натще
+        </mat-slide-toggle>
+
+        <mat-slide-toggle
+          [checked]="documentsSigned()"
+          (change)="documentsSigned.set($event.checked)"
+        >
+          Документи підписані
+        </mat-slide-toggle>
+
+        <mat-slide-toggle
+          [checked]="transferredToWard()"
+          (change)="transferredToWard.set($event.checked)"
+        >
+          Переведений у палату
+        </mat-slide-toggle>
+      </div>
+
+      <!-- Surgical team chips -->
+      <div class="chip-section full-width">
+        <label class="chip-label">Хірургічна бригада</label>
+        <mat-chip-grid #teamGrid aria-label="Бригада">
+          @for (member of surgicalTeam(); track member; let i = $index) {
+            <mat-chip-row (removed)="removeTeamMember(i)">
+              {{ member }}
+              <button matChipRemove aria-label="Видалити">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+          }
+        </mat-chip-grid>
+        <mat-form-field appearance="outline" class="chip-input">
+          <mat-label>Додати члена бригади</mat-label>
+          <input
+            matInput
+            #teamInput
+            placeholder="Ім'я лікаря..."
+            [matChipInputFor]="teamGrid"
+            (keydown.enter)="addTeamMember(teamInput)"
+            (keydown.comma)="addTeamMember(teamInput)"
+          />
+        </mat-form-field>
+      </div>
+
+      <!-- Post-op instructions -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Пост-операційні інструкції</mat-label>
+        <textarea
+          matInput
+          rows="5"
+          placeholder="Інструкції для пацієнта після операції..."
+          [value]="postOpInstructions()"
+          (input)="postOpInstructions.set($any($event.target).value)"
+        ></textarea>
+      </mat-form-field>
+
+    </mat-card-content>
+  </mat-card>
+}

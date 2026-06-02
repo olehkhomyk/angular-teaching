@@ -1,0 +1,82 @@
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding-top: 16px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.toggles {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  padding: 4px 0;
+}
+
+.toggle-row {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.follow-up-days {
+  width: 140px;
+}
+
+.chip-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chip-label {
+  font: var(--mat-sys-label-medium);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.chip-input {
+  width: 100%;
+}
+
+.table-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.table-label {
+  font: var(--mat-sys-label-medium);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.results-table {
+  width: 100%;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface);
+  padding: 4px 0;
+
+  &::placeholder {
+    color: var(--mat-sys-outline);
+  }
+}

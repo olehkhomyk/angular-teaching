@@ -1,0 +1,78 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-icon matCardAvatar>person</mat-icon>
+    <mat-card-title>
+      {{ appointment().patient.firstName }} {{ appointment().patient.lastName }}
+    </mat-card-title>
+    <mat-card-subtitle>{{ appointment().patient.age }} р.</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content class="info-grid">
+
+    <!-- Insurance number (readonly) -->
+    <mat-form-field appearance="outline">
+      <mat-label>Номер страховки</mat-label>
+      <input matInput [value]="appointment().patient.insuranceNumber" readonly />
+      <mat-icon matSuffix>shield</mat-icon>
+    </mat-form-field>
+
+    <!-- Temperature -->
+    <mat-form-field appearance="outline">
+      <mat-label>Температура</mat-label>
+      <input
+        matInput
+        type="number"
+        step="0.1"
+        min="34"
+        max="42"
+        [value]="temperature() ?? ''"
+        (input)="setTemperature($any($event.target).value)"
+        placeholder="36.6"
+      />
+      <span matSuffix>°C</span>
+    </mat-form-field>
+
+    <!-- Allergies -->
+    <mat-form-field appearance="outline">
+      <mat-label>Алергії</mat-label>
+      <mat-select
+        multiple
+        [value]="selectedAllergies()"
+        (valueChange)="setAllergies($event)"
+      >
+        @for (allergy of allergyOptions; track allergy) {
+          <mat-option [value]="allergy">{{ allergy }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Previous notes (readonly textarea) -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Попередні нотатки</mat-label>
+      <textarea
+        matInput
+        rows="3"
+        readonly
+        [value]="appointment().previousNotes"
+      ></textarea>
+    </mat-form-field>
+
+    <!-- Toggles -->
+    <div class="toggles">
+      <mat-slide-toggle
+        [checked]="isPresent()"
+        (change)="setIsPresent($event.checked)"
+      >
+        Пацієнт присутній
+      </mat-slide-toggle>
+
+      <mat-slide-toggle
+        [checked]="consentSigned()"
+        (change)="setConsentSigned($event.checked)"
+      >
+        Згода підписана
+      </mat-slide-toggle>
+    </div>
+
+  </mat-card-content>
+</mat-card>

@@ -1,4 +1,5 @@
 import { Component, input, output } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { DatePipe } from '@angular/common';
@@ -14,7 +15,7 @@ const TYPE_LABEL: Record<string, string> = {
 @Component({
   selector: 'app-patient-list',
   standalone: true,
-  imports: [MatIconModule, MatDividerModule, DatePipe, AppointmentStatusBadgeComponent],
+  imports: [RouterLink, MatIconModule, MatDividerModule, DatePipe, AppointmentStatusBadgeComponent],
   templateUrl: './patient-list.component.html',
   styleUrl: './patient-list.component.scss',
 })

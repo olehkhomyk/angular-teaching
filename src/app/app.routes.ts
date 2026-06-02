@@ -11,11 +11,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
   },
-  // Phase 2:
-  // {
-  //   path: 'appointment/:id',
-  //   loadComponent: () =>
-  //     import('./features/appointment-detail/appointment-detail.component')
-  //       .then(m => m.AppointmentDetailComponent),
-  // },
+  {
+    path: 'appointment/:id',
+    loadComponent: () =>
+      import('./features/appointment-detail/appointment-detail.component')
+        .then(m => m.AppointmentDetailComponent),
+  },
 ];
