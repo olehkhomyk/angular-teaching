@@ -51,6 +51,17 @@ src/app/
 
 **Naming convention:** `features/<page>/` holds the routed component; `features/<page>/ui/` holds presentational components scoped to that page; `shared/ui/` holds components reused across multiple pages.
 
+## Styling
+
+**Two systems in parallel — use each for what it's good at:**
+- **Tailwind 3** — layout, spacing, typography utilities (`flex`, `gap-4`, `px-4`, `text-sm`, etc.) written directly in HTML templates.
+- **Angular Material `--mat-sys-*` CSS variables** — colors and design tokens (`var(--mat-sys-primary)`, `var(--mat-sys-on-surface-variant)`, etc.) used in SCSS files.
+- **Component SCSS** — only for things neither Tailwind nor Material tokens cover (complex selectors, `::ng-deep`, pseudo-elements).
+
+Tailwind `preflight` is disabled (`tailwind.config.js`) so Material component styles are not affected. Config scans `./src/**/*.{html,ts}`.
+
+> **Important:** Tailwind is JIT — it only generates CSS for classes actually present in source files. After adding new Tailwind classes, the dev server picks them up automatically on save, but a fresh `ng serve` is required if the server wasn't running when classes were added.
+
 ## Schematics defaults
 
 Set in `angular.json` — style files default to SCSS, `skipTests: true` for all schematics.
