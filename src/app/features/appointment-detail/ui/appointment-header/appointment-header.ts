@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -21,8 +21,4 @@ import { AppointmentStatusBadgeComponent } from '../../../../shared/ui/appointme
 })
 export class AppointmentHeaderComponent {
   appointment = input.required<Appointment>();
-  isEditing = input(false);
-
-  editClick = output<void>();
-  cancelClick = output<void>();
 }

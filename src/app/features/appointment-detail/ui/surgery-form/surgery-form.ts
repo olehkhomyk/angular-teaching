@@ -1,5 +1,5 @@
-import { Component, effect, inject, input, output } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject, input, output } from '@angular/core';
+import { FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -8,8 +8,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { AppointmentFormService } from '../../appointment-form.service';
-import { SurgeryForm } from '../../../../core/models/patient.model';
+import { Appointment, SurgeryForm } from '../../../../core/models/patient.model';
 
 @Component({
   selector: 'app-surgery-form',
@@ -29,27 +28,55 @@ import { SurgeryForm } from '../../../../core/models/patient.model';
   styleUrl: './surgery-form.scss',
 })
 export class SurgeryFormComponent {
-  isEditing = input(false);
+  appointment = input.required<Appointment>();
   save = output<SurgeryForm>();
 
-  formService = inject(AppointmentFormService);
   private fb = inject(FormBuilder);
 
-  get form() { return this.formService.surgeryForm; }
-  get surgicalTeam() { return this.formService.surgicalTeam; }
+  isEditing = false;
+
+  form = this.fb.group({
+    anesthesiaType: [''],
+    durationMinutes: [null as number | null],
+    operatingRoom: [''],
+    isFasting: [false],
+    documentsSigned: [false],
+    transferredToWard: [false],
+    surgicalTeam: this.fb.array<string>([]),
+    postOpInstructions: [''],
+  });
+
+  private snapshot: SurgeryForm | null = null;
+
+  get surgicalTeam(): FormArray {
+    return this.form.controls.surgicalTeam as FormArray;
+  }
 
   constructor() {
-    effect(() => {
-      if (this.isEditing()) {
-        this.form.enable();
-      } else {
-        this.form.disable();
-      }
-    });
+    this.form.disable();
+  }
+
+  startEditing(): void {
+    this.snapshot = this.form.getRawValue() as SurgeryForm;
+    this.form.enable();
+    this.isEditing = true;
+  }
+
+  cancelEditing(): void {
+    if (this.snapshot) {
+      const { surgicalTeam, ...scalars } = this.snapshot;
+      this.form.reset(scalars);
+      this.surgicalTeam.clear({ emitEvent: false });
+      surgicalTeam.forEach(v => this.surgicalTeam.push(this.fb.control(v), { emitEvent: false }));
+    }
+    this.form.disable();
+    this.isEditing = false;
   }
 
   onSave(): void {
     this.save.emit(this.form.getRawValue() as SurgeryForm);
+    this.form.disable();
+    this.isEditing = false;
   }
 
   addTeamMember(input: HTMLInputElement): void {

@@ -1,5 +1,5 @@
-import { Component, effect, inject, input, output } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject, input, output } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -9,8 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { AppointmentFormService } from '../../appointment-form.service';
-import { ExaminationForm } from '../../../../core/models/patient.model';
+import { Appointment, ExaminationForm } from '../../../../core/models/patient.model';
 
 @Component({
   selector: 'app-examination-form',
@@ -30,37 +29,68 @@ import { ExaminationForm } from '../../../../core/models/patient.model';
   styleUrl: './examination-form.scss',
 })
 export class ExaminationFormComponent {
-  isEditing = input(false);
+  appointment = input.required<Appointment>();
   save = output<ExaminationForm>();
 
-  formService = inject(AppointmentFormService);
   private fb = inject(FormBuilder);
 
   readonly examResultColumns = ['name', 'value', 'norm', 'actions'];
 
-  get form() { return this.formService.examinationForm; }
-  get examResults() { return this.formService.examResults; }
+  isEditing = false;
+
+  form = this.fb.group({
+    examinationType: [''],
+    isFasting: [false],
+    referralNumber: [''],
+    resultsReceived: [false],
+    conclusion: [''],
+    results: this.fb.array<FormGroup>([]),
+  });
+
+  private snapshot: ExaminationForm | null = null;
+
+  get examResults(): FormArray<FormGroup> {
+    return this.form.controls.results as FormArray<FormGroup>;
+  }
 
   constructor() {
-    effect(() => {
-      if (this.isEditing()) {
-        this.form.enable();
-      } else {
-        this.form.disable();
-      }
-    });
+    this.form.disable();
 
-    this.formService.examinationForm.controls.resultsReceived.valueChanges
+    this.form.controls.resultsReceived.valueChanges
       .pipe(takeUntilDestroyed())
       .subscribe(received => {
         if (!received) {
-          this.formService.examinationForm.controls.conclusion.reset('', { emitEvent: false });
+          this.form.controls.conclusion.reset('', { emitEvent: false });
         }
       });
   }
 
+  startEditing(): void {
+    this.snapshot = this.form.getRawValue() as ExaminationForm;
+    this.form.enable();
+    this.isEditing = true;
+  }
+
+  cancelEditing(): void {
+    if (this.snapshot) {
+      const { results, ...scalars } = this.snapshot;
+      this.form.reset(scalars);
+      this.examResults.clear({ emitEvent: false });
+      results.forEach(r =>
+        this.examResults.push(
+          this.fb.group({ name: [r.name], value: [r.value], norm: [r.norm] }),
+          { emitEvent: false },
+        ),
+      );
+    }
+    this.form.disable();
+    this.isEditing = false;
+  }
+
   onSave(): void {
     this.save.emit(this.form.getRawValue() as ExaminationForm);
+    this.form.disable();
+    this.isEditing = false;
   }
 
   addExamResult(): void {

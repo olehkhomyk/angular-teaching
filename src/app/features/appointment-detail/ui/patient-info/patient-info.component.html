@@ -2,8 +2,14 @@
   <mat-card-header>
     <mat-icon matCardAvatar>person</mat-icon>
     <mat-card-title>
-     Картка пацієнта
+      Картка пацієнта
     </mat-card-title>
+
+    @if (patientType() === 'military') {
+      <span class="ml-auto px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 border border-yellow-400 self-baseline">
+        🪖 Військовий
+      </span>
+    }
   </mat-card-header>
 
   <mat-card-content class="info-grid">
@@ -51,6 +57,21 @@
       ></textarea>
     </mat-form-field>
 
+    <!-- MILITARY: extra block -->
+    @if (patientType() === 'military') {
+      <mat-form-field appearance="outline" class="full-width military-field">
+        <mat-label>Бойові травми / поранення</mat-label>
+        <textarea matInput rows="2" placeholder="Опишіть характер поранень..." formControlName="combatInjuries"></textarea>
+        <mat-icon matPrefix>emergency</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width military-field">
+        <mat-label>Психологічний стан</mat-label>
+        <textarea matInput rows="2" placeholder="Психоемоційний стан на момент огляду..." formControlName="psychologicalState"></textarea>
+        <mat-icon matPrefix>psychology</mat-icon>
+      </mat-form-field>
+    }
+
     <!-- Toggles -->
     <div class="toggles">
       <mat-slide-toggle formControlName="isPresent">
@@ -60,15 +81,30 @@
       <mat-slide-toggle formControlName="consentSigned">
         Згода підписана
       </mat-slide-toggle>
+
+      @if (patientType() === 'military') {
+        <mat-slide-toggle formControlName="evacuationCardSigned">
+          Евакуаційна картка підписана
+        </mat-slide-toggle>
+      }
     </div>
   </mat-card-content>
 
-  @if (isEditing()) {
-    <mat-card-actions align="end">
+  <mat-card-actions align="end">
+    @if (!isEditing) {
+      <button mat-stroked-button (click)="startEditing()">
+        <mat-icon>edit</mat-icon>
+        Редагувати
+      </button>
+    } @else {
+      <button mat-stroked-button (click)="cancelEditing()">
+        <mat-icon>close</mat-icon>
+        Скасувати
+      </button>
       <button mat-flat-button (click)="onSave()">
         <mat-icon>save</mat-icon>
         Зберегти
       </button>
-    </mat-card-actions>
-  }
+    }
+  </mat-card-actions>
 </mat-card>

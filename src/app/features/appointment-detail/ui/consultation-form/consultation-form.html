@@ -73,12 +73,21 @@
 
   </mat-card-content>
 
-  @if (isEditing()) {
-    <mat-card-actions align="end">
+  <mat-card-actions align="end">
+    @if (!isEditing) {
+      <button mat-stroked-button (click)="startEditing()">
+        <mat-icon>edit</mat-icon>
+        Редагувати
+      </button>
+    } @else {
+      <button mat-stroked-button (click)="cancelEditing()">
+        <mat-icon>close</mat-icon>
+        Скасувати
+      </button>
       <button mat-flat-button (click)="onSave()">
         <mat-icon>save</mat-icon>
         Зберегти
       </button>
-    </mat-card-actions>
-  }
+    }
+  </mat-card-actions>
 </mat-card>

@@ -5,31 +5,24 @@
 } @else if (appointment()) {
   <div class="detail-layout">
 
-    <app-appointment-header
-      [appointment]="appointment()!"
-      [isEditing]="isEditing()"
-      (editClick)="startEditing()"
-      (cancelClick)="cancelEditing()"
-    />
+    <app-appointment-header [appointment]="appointment()!" />
 
     <app-patient-info
       [appointment]="appointment()!"
-      [isEditing]="isEditing()"
       (save)="savePatientInfo($event)"
     />
 
     @switch (type()) {
       @case ('consultation') {
-        <app-consultation-form [isEditing]="isEditing()" (save)="saveAppointment($event)" />
+        <app-consultation-form [appointment]="appointment()!" (save)="saveAppointment($event)" />
       }
       @case ('examination') {
-        <app-examination-form [isEditing]="isEditing()" (save)="saveAppointment($event)" />
+        <app-examination-form [appointment]="appointment()!" (save)="saveAppointment($event)" />
       }
       @case ('surgery') {
-        <app-surgery-form [isEditing]="isEditing()" (save)="saveAppointment($event)" />
+        <app-surgery-form [appointment]="appointment()!" (save)="saveAppointment($event)" />
       }
     }
-
   </div>
 } @else {
   <div class="not-found">

@@ -1,5 +1,9 @@
 export type AppointmentStatus = 'scheduled' | 'in-progress' | 'completed' | 'cancelled';
 export type AppointmentType = 'consultation' | 'examination' | 'surgery';
+export enum PatientType {
+  Regular = 'regular',
+  Military = 'military',
+}
 
 export interface Patient {
   id: string;
@@ -8,6 +12,7 @@ export interface Patient {
   age: number;
   avatarUrl?: string;
   insuranceNumber: string;
+  patientType: PatientType;
 }
 
 export interface Appointment {
@@ -22,10 +27,15 @@ export interface Appointment {
 }
 
 export interface PatientInfoForm {
+  patientType: PatientType;
   isPresent: boolean;
   allergies: string[];
   temperature: number | null;
   consentSigned: boolean;
+  // military only
+  combatInjuries?: string;
+  psychologicalState?: string;
+  evacuationCardSigned?: boolean;
 }
 
 export interface ConsultationForm {
