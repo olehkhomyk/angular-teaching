@@ -1,0 +1,52 @@
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding-top: 16px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.toggles {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  padding: 4px 0;
+
+  ::ng-deep mat-slide-toggle label {
+    padding-left: 10px;
+  }
+}
+
+.toggle-row {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+
+  ::ng-deep mat-slide-toggle label {
+    padding-left: 10px;
+  }
+}
+
+.follow-up-days {
+  width: 140px;
+}
+
+.chip-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chip-label {
+  font: var(--mat-sys-label-medium);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.chip-input {
+  width: 100%;
+}

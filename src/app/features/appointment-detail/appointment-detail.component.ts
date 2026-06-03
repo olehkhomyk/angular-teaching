@@ -4,17 +4,17 @@ import { ActivatedRoute } from '@angular/router';
 import { switchMap, finalize } from 'rxjs/operators';
 import { map } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
-import { DatePipe } from '@angular/common';
 import { AppointmentsService } from '../../core/services/appointments.service';
 import { AppointmentFormService } from './appointment-form.service';
 import { PatientInfoComponent } from './ui/patient-info/patient-info.component';
-import { AppointmentFormComponent } from './ui/appointment-form/appointment-form.component';
 import { AppointmentHeaderComponent } from './ui/appointment-header/appointment-header';
 import { ConsultationForm, ExaminationForm, PatientInfoForm, SurgeryForm } from '../../core/models/patient.model';
+import { ConsultationFormComponent } from './ui/consultation-form/consultation-form';
+import { ExaminationFormComponent } from './ui/examination-form/examination-form';
+import { SurgeryFormComponent } from './ui/surgery-form/surgery-form';
 
 @Component({
   selector: 'app-appointment-detail',
@@ -26,8 +26,10 @@ import { ConsultationForm, ExaminationForm, PatientInfoForm, SurgeryForm } from 
     MatButtonModule,
     RouterLink,
     PatientInfoComponent,
-    AppointmentFormComponent,
     AppointmentHeaderComponent,
+    ConsultationFormComponent,
+    ExaminationFormComponent,
+    SurgeryFormComponent
   ],
   templateUrl: './appointment-detail.component.html',
   styleUrl: './appointment-detail.component.scss',
@@ -46,6 +48,7 @@ export class AppointmentDetailComponent {
     { initialValue: undefined },
   );
 
+  type = computed(() => this.appointment()?.type);
   isLoading = computed(() => this.appointment() === undefined);
   isEditing = signal(false);
   isSavingPatient = signal(false);

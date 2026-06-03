@@ -1,17 +1,18 @@
 import { Component, effect, inject, input, output } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { Appointment, PatientInfoForm } from '../../../../core/models/patient.model';
 import { AppointmentFormService } from '../../appointment-form.service';
+import { SurgeryForm } from '../../../../core/models/patient.model';
 
 @Component({
-  selector: 'app-patient-info',
+  selector: 'app-surgery-form',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -20,25 +21,22 @@ import { AppointmentFormService } from '../../appointment-form.service';
     MatInputModule,
     MatSelectModule,
     MatSlideToggleModule,
+    MatChipsModule,
     MatIconModule,
     MatButtonModule,
   ],
-  templateUrl: './patient-info.component.html',
-  styleUrl: './patient-info.component.scss',
+  templateUrl: './surgery-form.html',
+  styleUrl: './surgery-form.scss',
 })
-export class PatientInfoComponent {
-  appointment = input.required<Appointment>();
+export class SurgeryFormComponent {
   isEditing = input(false);
+  save = output<SurgeryForm>();
 
-  save = output<PatientInfoForm>();
+  formService = inject(AppointmentFormService);
+  private fb = inject(FormBuilder);
 
-  private formService = inject(AppointmentFormService);
-
-  get form(): FormGroup {
-    return this.formService.patientInfoForm;
-  }
-
-  readonly allergyOptions = ['Пеніцилін', 'Латекс', 'Йод', 'Немає'];
+  get form() { return this.formService.surgeryForm; }
+  get surgicalTeam() { return this.formService.surgicalTeam; }
 
   constructor() {
     effect(() => {
@@ -51,6 +49,18 @@ export class PatientInfoComponent {
   }
 
   onSave(): void {
-    this.save.emit(this.formService.patientInfoForm.getRawValue() as PatientInfoForm);
+    this.save.emit(this.form.getRawValue() as SurgeryForm);
+  }
+
+  addTeamMember(input: HTMLInputElement): void {
+    const value = input.value.trim();
+    if (value) {
+      this.surgicalTeam.push(this.fb.control(value));
+      input.value = '';
+    }
+  }
+
+  removeTeamMember(index: number): void {
+    this.surgicalTeam.removeAt(index);
   }
 }

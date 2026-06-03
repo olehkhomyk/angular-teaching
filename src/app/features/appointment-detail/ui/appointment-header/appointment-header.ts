@@ -5,7 +5,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Appointment } from '../../../../core/models/patient.model';
 import { AppointmentStatusBadgeComponent } from '../../../../shared/ui/appointment-status-badge/appointment-status-badge.component';
-import { MatCardSubtitle } from '@angular/material/card';
 
 @Component({
   selector: 'app-appointment-header',
@@ -16,7 +15,6 @@ import { MatCardSubtitle } from '@angular/material/card';
     MatIconModule,
     MatButtonModule,
     AppointmentStatusBadgeComponent,
-    MatCardSubtitle,
   ],
   templateUrl: './appointment-header.html',
   styleUrl: './appointment-header.scss',

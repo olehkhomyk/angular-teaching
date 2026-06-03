@@ -18,11 +18,17 @@
       (save)="savePatientInfo($event)"
     />
 
-    <app-appointment-form
-      [appointment]="appointment()!"
-      [isEditing]="isEditing()"
-      (save)="saveAppointment($event)"
-    />
+    @switch (type()) {
+      @case ('consultation') {
+        <app-consultation-form [isEditing]="isEditing()" (save)="saveAppointment($event)" />
+      }
+      @case ('examination') {
+        <app-examination-form [isEditing]="isEditing()" (save)="saveAppointment($event)" />
+      }
+      @case ('surgery') {
+        <app-surgery-form [isEditing]="isEditing()" (save)="saveAppointment($event)" />
+      }
+    }
 
   </div>
 } @else {
