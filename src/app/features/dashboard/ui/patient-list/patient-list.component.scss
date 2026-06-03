@@ -107,6 +107,30 @@
   opacity: 0.35;
 }
 
+.type-badge {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.type-consultation {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.type-examination {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.type-surgery {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
 .row-date {
   font-size: 11px;
   color: #94a3b8;

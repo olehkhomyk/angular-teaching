@@ -21,7 +21,7 @@
         <span class="age">({{ appt.patient.age }} р.)</span>
       </div>
       <div class="row-meta">
-        <span>{{ typeLabel(appt.type) }}</span>
+        <span [class]="typeClass(appt.type)">{{ typeLabel(appt.type) }}</span>
         <span class="dot">·</span>
         <span>{{ appt.doctorName }}</span>
         <span class="dot">·</span>

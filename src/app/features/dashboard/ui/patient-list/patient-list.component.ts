@@ -11,6 +11,12 @@ const TYPE_LABEL: Record<string, string> = {
   surgery:      'Операція',
 };
 
+const TYPE_CLASS: Record<string, string> = {
+  consultation: 'type-badge type-consultation',
+  examination:  'type-badge type-examination',
+  surgery:      'type-badge type-surgery',
+};
+
 @Component({
   selector: 'app-patient-list',
   standalone: true,
@@ -25,5 +31,9 @@ export class PatientListComponent {
 
   typeLabel(type: string): string {
     return TYPE_LABEL[type] ?? type;
+  }
+
+  typeClass(type: string): string {
+    return TYPE_CLASS[type] ?? 'type-badge';
   }
 }
