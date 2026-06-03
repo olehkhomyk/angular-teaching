@@ -1,4 +1,4 @@
-<mat-card appearance="outlined">
+<mat-card appearance="outlined" [formGroup]="patientInfoForm">
   <mat-card-header>
     <mat-icon matCardAvatar>person</mat-icon>
     <mat-card-title>
@@ -25,9 +25,8 @@
         step="0.1"
         min="34"
         max="42"
-        [value]="temperature() ?? ''"
-        (input)="setTemperature($any($event.target).value)"
         placeholder="36.6"
+        formControlName="temperature"
       />
       <span class="pr-5" matSuffix>°C</span>
     </mat-form-field>
@@ -35,11 +34,7 @@
     <!-- Allergies -->
     <mat-form-field appearance="outline">
       <mat-label>Алергії</mat-label>
-      <mat-select
-        multiple
-        [value]="selectedAllergies()"
-        (valueChange)="setAllergies($event)"
-      >
+      <mat-select multiple formControlName="selectedAllergies">
         @for (allergy of allergyOptions; track allergy) {
           <mat-option [value]="allergy">{{ allergy }}</mat-option>
         }
@@ -59,17 +54,11 @@
 
     <!-- Toggles -->
     <div class="toggles">
-      <mat-slide-toggle
-        [checked]="isPresent()"
-        (change)="setIsPresent($event.checked)"
-      >
+      <mat-slide-toggle formControlName="isPresent">
         Пацієнт присутній
       </mat-slide-toggle>
 
-      <mat-slide-toggle
-        [checked]="consentSigned()"
-        (change)="setConsentSigned($event.checked)"
-      >
+      <mat-slide-toggle formControlName="consentSigned">
         Згода підписана
       </mat-slide-toggle>
     </div>

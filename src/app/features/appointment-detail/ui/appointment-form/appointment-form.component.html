@@ -2,7 +2,7 @@
      CONSULTATION
      ════════════════════════════════════════════════════ -->
 @if (type() === 'consultation') {
-  <mat-card appearance="outlined">
+  <mat-card appearance="outlined" [formGroup]="consultationForm">
     <mat-card-header>
       <mat-icon matCardAvatar>medical_information</mat-icon>
       <mat-card-title>Консультація</mat-card-title>
@@ -13,7 +13,7 @@
       <!-- Visit reason -->
       <mat-form-field appearance="outline">
         <mat-label>Причина візиту</mat-label>
-        <mat-select [value]="visitReason()" (valueChange)="visitReason.set($event)">
+        <mat-select formControlName="visitReason">
           <mat-option value="cold">Застуда / ГРВІ</mat-option>
           <mat-option value="pain">Больовий синдром</mat-option>
           <mat-option value="checkup">Профілактичний огляд</mat-option>
@@ -23,17 +23,14 @@
 
       <!-- Follow-up toggle + days (same row) -->
       <div class="toggle-row">
-        <mat-slide-toggle
-          [checked]="needsFollowUp()"
-          (change)="needsFollowUp.set($event.checked)"
-        >
+        <mat-slide-toggle formControlName="needsFollowUp">
           Потрібен повторний прийом
         </mat-slide-toggle>
 
-        @if (needsFollowUp()) {
+        @if (consultationForm.controls.needsFollowUp.value) {
           <mat-form-field appearance="outline" class="follow-up-days">
             <mat-label>Через</mat-label>
-            <mat-select [value]="followUpDays()" (valueChange)="followUpDays.set($event)">
+            <mat-select formControlName="followUpDays">
               <mat-option [value]="7">7 днів</mat-option>
               <mat-option [value]="14">14 днів</mat-option>
               <mat-option [value]="30">30 днів</mat-option>
@@ -49,8 +46,7 @@
           matInput
           rows="3"
           placeholder="Опишіть скарги..."
-          [value]="complaints()"
-          (input)="complaints.set($any($event.target).value)"
+          formControlName="complaints"
         ></textarea>
       </mat-form-field>
 
@@ -61,8 +57,7 @@
           matInput
           rows="3"
           placeholder="Діагноз лікаря..."
-          [value]="diagnosis()"
-          (input)="diagnosis.set($any($event.target).value)"
+          formControlName="diagnosis"
         ></textarea>
       </mat-form-field>
 
@@ -70,9 +65,9 @@
       <div class="chip-section full-width">
         <label class="chip-label">Призначені препарати</label>
         <mat-chip-grid #medicationGrid aria-label="Препарати">
-          @for (med of medications(); track med; let i = $index) {
+          @for (ctrl of medications.controls; track ctrl; let i = $index) {
             <mat-chip-row (removed)="removeMedication(i)">
-              {{ med }}
+              {{ ctrl.value }}
               <button matChipRemove aria-label="Видалити">
                 <mat-icon>cancel</mat-icon>
               </button>
@@ -87,7 +82,7 @@
             placeholder="Назва препарату..."
             [matChipInputFor]="medicationGrid"
             (keydown.enter)="addMedication(medInput)"
-            (keydown.comma)="addMedication(medInput)"
+            (keydown)="$event.key === ',' && addMedication(medInput)"
           />
         </mat-form-field>
       </div>
@@ -100,7 +95,7 @@
      EXAMINATION
      ════════════════════════════════════════════════════ -->
 @if (type() === 'examination') {
-  <mat-card appearance="outlined">
+  <mat-card appearance="outlined" [formGroup]="examinationForm">
     <mat-card-header>
       <mat-icon matCardAvatar>biotech</mat-icon>
       <mat-card-title>Обстеження</mat-card-title>
@@ -111,7 +106,7 @@
       <!-- Examination type -->
       <mat-form-field appearance="outline">
         <mat-label>Тип обстеження</mat-label>
-        <mat-select [value]="examinationType()" (valueChange)="examinationType.set($event)">
+        <mat-select formControlName="examinationType">
           <mat-option value="blood">Аналіз крові</mat-option>
           <mat-option value="ultrasound">УЗД</mat-option>
           <mat-option value="mri">МРТ</mat-option>
@@ -125,25 +120,18 @@
         <input
           matInput
           placeholder="REF-2026-..."
-          [value]="referralNumber()"
-          (input)="referralNumber.set($any($event.target).value)"
+          formControlName="referralNumber"
         />
         <mat-icon matSuffix>assignment</mat-icon>
       </mat-form-field>
 
       <!-- Toggles -->
       <div class="toggles full-width">
-        <mat-slide-toggle
-          [checked]="isFasting()"
-          (change)="isFasting.set($event.checked)"
-        >
+        <mat-slide-toggle formControlName="isFasting">
           Пацієнт натще
         </mat-slide-toggle>
 
-        <mat-slide-toggle
-          [checked]="resultsReceived()"
-          (change)="resultsReceived.set($event.checked)"
-        >
+        <mat-slide-toggle formControlName="resultsReceived">
           Результати отримані
         </mat-slide-toggle>
       </div>
@@ -157,15 +145,14 @@
           </button>
         </div>
 
-        @if (examResults().length > 0) {
-          <table mat-table [dataSource]="examResults()" class="results-table">
+        @if (examResults.length > 0) {
+          <table mat-table [dataSource]="examResults.controls" class="results-table">
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef>Показник</th>
-              <td mat-cell *matCellDef="let row; let i = index">
+              <td mat-cell *matCellDef="let group">
                 <input
                   class="table-input"
-                  [value]="row.name"
-                  (input)="updateExamResult(i, 'name', $any($event.target).value)"
+                  [formControl]="group.controls['name']"
                   placeholder="Гемоглобін..."
                 />
               </td>
@@ -173,11 +160,10 @@
 
             <ng-container matColumnDef="value">
               <th mat-header-cell *matHeaderCellDef>Значення</th>
-              <td mat-cell *matCellDef="let row; let i = index">
+              <td mat-cell *matCellDef="let group">
                 <input
                   class="table-input"
-                  [value]="row.value"
-                  (input)="updateExamResult(i, 'value', $any($event.target).value)"
+                  [formControl]="group.controls['value']"
                   placeholder="130 г/л"
                 />
               </td>
@@ -185,11 +171,10 @@
 
             <ng-container matColumnDef="norm">
               <th mat-header-cell *matHeaderCellDef>Норма</th>
-              <td mat-cell *matCellDef="let row; let i = index">
+              <td mat-cell *matCellDef="let group">
                 <input
                   class="table-input"
-                  [value]="row.norm"
-                  (input)="updateExamResult(i, 'norm', $any($event.target).value)"
+                  [formControl]="group.controls['norm']"
                   placeholder="120–160 г/л"
                 />
               </td>
@@ -197,7 +182,7 @@
 
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let row; let i = index">
+              <td mat-cell *matCellDef="let group; let i = index">
                 <button mat-icon-button (click)="removeExamResult(i)" aria-label="Видалити рядок">
                   <mat-icon>delete_outline</mat-icon>
                 </button>
@@ -205,21 +190,20 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="examResultColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: examResultColumns;"></tr>
+            <tr mat-row *matRowDef="let _row; columns: examResultColumns;"></tr>
           </table>
         }
       </div>
 
       <!-- Conclusion — shown only when resultsReceived -->
-      @if (resultsReceived()) {
+      @if (examinationForm.controls.resultsReceived.value) {
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Висновок</mat-label>
           <textarea
             matInput
             rows="4"
             placeholder="Висновок лікаря за результатами..."
-            [value]="conclusion()"
-            (input)="conclusion.set($any($event.target).value)"
+            formControlName="conclusion"
           ></textarea>
         </mat-form-field>
       }
@@ -232,7 +216,7 @@
      SURGERY
      ════════════════════════════════════════════════════ -->
 @if (type() === 'surgery') {
-  <mat-card appearance="outlined">
+  <mat-card appearance="outlined" [formGroup]="surgeryForm">
     <mat-card-header>
       <mat-icon matCardAvatar>emergency</mat-icon>
       <mat-card-title>Операція</mat-card-title>
@@ -243,7 +227,7 @@
       <!-- Anesthesia type -->
       <mat-form-field appearance="outline">
         <mat-label>Тип анестезії</mat-label>
-        <mat-select [value]="anesthesiaType()" (valueChange)="anesthesiaType.set($event)">
+        <mat-select formControlName="anesthesiaType">
           <mat-option value="general">Загальна</mat-option>
           <mat-option value="local">Місцева</mat-option>
           <mat-option value="spinal">Спінальна</mat-option>
@@ -257,9 +241,8 @@
           matInput
           type="number"
           min="1"
-          [value]="durationMinutes() ?? ''"
-          (input)="setDuration($any($event.target).value)"
           placeholder="90"
+          formControlName="durationMinutes"
         />
         <span class="pr-5" matSuffix>хв</span>
       </mat-form-field>
@@ -267,7 +250,7 @@
       <!-- Operating room -->
       <mat-form-field appearance="outline">
         <mat-label>Операційна зала</mat-label>
-        <mat-select [value]="operatingRoom()" (valueChange)="operatingRoom.set($event)">
+        <mat-select formControlName="operatingRoom">
           <mat-option value="or1">Зала 1</mat-option>
           <mat-option value="or2">Зала 2</mat-option>
           <mat-option value="or3">Зала 3</mat-option>
@@ -276,24 +259,15 @@
 
       <!-- Toggles -->
       <div class="toggles full-width">
-        <mat-slide-toggle
-          [checked]="surgeryIsFasting()"
-          (change)="surgeryIsFasting.set($event.checked)"
-        >
+        <mat-slide-toggle formControlName="isFasting">
           Пацієнт натще
         </mat-slide-toggle>
 
-        <mat-slide-toggle
-          [checked]="documentsSigned()"
-          (change)="documentsSigned.set($event.checked)"
-        >
+        <mat-slide-toggle formControlName="documentsSigned">
           Документи підписані
         </mat-slide-toggle>
 
-        <mat-slide-toggle
-          [checked]="transferredToWard()"
-          (change)="transferredToWard.set($event.checked)"
-        >
+        <mat-slide-toggle formControlName="transferredToWard">
           Переведений у палату
         </mat-slide-toggle>
       </div>
@@ -302,9 +276,9 @@
       <div class="chip-section full-width">
         <label class="chip-label">Хірургічна бригада</label>
         <mat-chip-grid #teamGrid aria-label="Бригада">
-          @for (member of surgicalTeam(); track member; let i = $index) {
+          @for (ctrl of surgicalTeam.controls; track ctrl; let i = $index) {
             <mat-chip-row (removed)="removeTeamMember(i)">
-              {{ member }}
+              {{ ctrl.value }}
               <button matChipRemove aria-label="Видалити">
                 <mat-icon>cancel</mat-icon>
               </button>
@@ -319,7 +293,7 @@
             placeholder="Ім'я лікаря..."
             [matChipInputFor]="teamGrid"
             (keydown.enter)="addTeamMember(teamInput)"
-            (keydown.comma)="addTeamMember(teamInput)"
+            (keydown)="$event.key === ',' && addTeamMember(teamInput)"
           />
         </mat-form-field>
       </div>
@@ -331,8 +305,7 @@
           matInput
           rows="5"
           placeholder="Інструкції для пацієнта після операції..."
-          [value]="postOpInstructions()"
-          (input)="postOpInstructions.set($any($event.target).value)"
+          formControlName="postOpInstructions"
         ></textarea>
       </mat-form-field>
 

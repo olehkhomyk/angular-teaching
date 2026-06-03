@@ -1,5 +1,5 @@
-import { Component, computed, input, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, computed, inject, input, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -11,17 +11,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { Appointment } from '../../../../core/models/patient.model';
 
-interface ExamResult {
-  name: string;
-  value: string;
-  norm: string;
-}
-
 @Component({
   selector: 'app-appointment-form',
   standalone: true,
   imports: [
-    FormsModule,
+    ReactiveFormsModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -35,81 +29,99 @@ interface ExamResult {
   templateUrl: './appointment-form.component.html',
   styleUrl: './appointment-form.component.scss',
 })
-export class AppointmentFormComponent {
+export class AppointmentFormComponent implements OnInit {
   appointment = input.required<Appointment>();
 
   type = computed(() => this.appointment().type);
 
-  // ── Consultation ──────────────────────────────────────────────
-  visitReason = signal('');
-  complaints = signal('');
-  diagnosis = signal('');
-  medications = signal<string[]>([]);
-  needsFollowUp = signal(false);
-  followUpDays = signal<number | null>(null);
+  private fb = inject(FormBuilder);
 
-  // ── Examination ───────────────────────────────────────────────
-  examinationType = signal('');
-  isFasting = signal(false);
-  referralNumber = signal('');
-  examResults = signal<ExamResult[]>([]);
-  resultsReceived = signal(false);
-  conclusion = signal('');
+  consultationForm = this.fb.group({
+    visitReason: [''],
+    complaints: [''],
+    diagnosis: [''],
+    medications: this.fb.array<string>([]),
+    needsFollowUp: [false],
+    followUpDays: [null as number | null],
+  });
 
-  // ── Surgery ───────────────────────────────────────────────────
-  anesthesiaType = signal('');
-  durationMinutes = signal<number | null>(null);
-  surgeryIsFasting = signal(false);
-  documentsSigned = signal(false);
-  surgicalTeam = signal<string[]>([]);
-  operatingRoom = signal('');
-  postOpInstructions = signal('');
-  transferredToWard = signal(false);
+  examinationForm = this.fb.group({
+    examinationType: [''],
+    isFasting: [false],
+    referralNumber: [''],
+    resultsReceived: [false],
+    conclusion: [''],
+    results: this.fb.array<FormGroup>([]),
+  });
 
-  // ── Chip helpers ──────────────────────────────────────────────
+  surgeryForm = this.fb.group({
+    anesthesiaType: [''],
+    durationMinutes: [null as number | null],
+    operatingRoom: [''],
+    isFasting: [false],
+    documentsSigned: [false],
+    transferredToWard: [false],
+    surgicalTeam: this.fb.array<string>([]),
+    postOpInstructions: [''],
+  });
+
+  ngOnInit(): void {
+    // Disable conclusion when resultsReceived is false
+    this.examinationForm.controls.resultsReceived.valueChanges.subscribe(received => {
+      if (!received) {
+        this.examinationForm.controls.conclusion.reset('');
+      }
+    });
+  }
+
+  // ── Consultation: medications ──────────────────────────────────
+  get medications(): FormArray<ReturnType<FormBuilder['control']>> {
+    return this.consultationForm.controls.medications as FormArray;
+  }
+
   addMedication(input: HTMLInputElement): void {
     const value = input.value.trim();
     if (value) {
-      this.medications.update(m => [...m, value]);
+      this.medications.push(this.fb.control(value));
       input.value = '';
     }
   }
 
   removeMedication(index: number): void {
-    this.medications.update(m => m.filter((_, i) => i !== index));
+    this.medications.removeAt(index);
+  }
+
+  // ── Examination: results table ─────────────────────────────────
+  get examResults(): FormArray<FormGroup> {
+    return this.examinationForm.controls.results as FormArray<FormGroup>;
+  }
+
+  readonly examResultColumns = ['name', 'value', 'norm', 'actions'];
+
+  addExamResult(): void {
+    this.examResults.push(
+      this.fb.group({ name: [''], value: [''], norm: [''] }),
+    );
+  }
+
+  removeExamResult(index: number): void {
+    this.examResults.removeAt(index);
+  }
+
+  // ── Surgery: surgical team ─────────────────────────────────────
+  get surgicalTeam(): FormArray<ReturnType<FormBuilder['control']>> {
+    return this.surgeryForm.controls.surgicalTeam as FormArray;
   }
 
   addTeamMember(input: HTMLInputElement): void {
     const value = input.value.trim();
     if (value) {
-      this.surgicalTeam.update(t => [...t, value]);
+      this.surgicalTeam.push(this.fb.control(value));
       input.value = '';
     }
   }
 
   removeTeamMember(index: number): void {
-    this.surgicalTeam.update(t => t.filter((_, i) => i !== index));
-  }
-
-  // ── Exam results table ────────────────────────────────────────
-  readonly examResultColumns = ['name', 'value', 'norm', 'actions'];
-
-  addExamResult(): void {
-    this.examResults.update(r => [...r, { name: '', value: '', norm: '' }]);
-  }
-
-  removeExamResult(index: number): void {
-    this.examResults.update(r => r.filter((_, i) => i !== index));
-  }
-
-  updateExamResult(index: number, field: keyof ExamResult, value: string): void {
-    this.examResults.update(r =>
-      r.map((row, i) => (i === index ? { ...row, [field]: value } : row)),
-    );
-  }
-
-  setDuration(val: string): void {
-    const num = parseInt(val, 10);
-    this.durationMinutes.set(isNaN(num) ? null : num);
+    this.surgicalTeam.removeAt(index);
   }
 }
