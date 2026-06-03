@@ -1,4 +1,40 @@
-.toolbar-title {
-  margin-left: 8px;
-  font: var(--mat-sys-title-large);
+.app-navbar {
+  height: 64px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+  box-shadow: 0 2px 8px rgb(37 99 235 / 0.3);
+}
+
+.navbar-icon-wrap {
+  width: 40px;
+  height: 40px;
+  background: rgb(255 255 255 / 0.15);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.navbar-icon {
+  color: white;
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+}
+
+.navbar-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.3px;
+}
+
+.navbar-subtitle {
+  font-size: 11px;
+  color: rgb(255 255 255 / 0.65);
+  letter-spacing: 0.2px;
+  margin-top: -1px;
 }

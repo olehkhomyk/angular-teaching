@@ -1,13 +1,13 @@
 @if (isLoading()) {
   <div class="spinner-wrap">
-    <mat-progress-spinner mode="indeterminate" diameter="48" />
+    <mat-progress-spinner mode="indeterminate" diameter="40" />
   </div>
 } @else if (appointment()) {
   <div class="detail-layout">
 
-    <!-- Back button + header -->
+    <!-- Header -->
     <div class="detail-header">
-      <button mat-icon-button routerLink="/dashboard" aria-label="Назад">
+      <button class="back-btn" routerLink="/dashboard" aria-label="Назад">
         <mat-icon>arrow_back</mat-icon>
       </button>
       <div class="header-info">
@@ -25,7 +25,7 @@
       <app-appointment-status-badge [status]="appointment()!.status" />
     </div>
 
-    <!-- Patient info (shared for all types) -->
+    <!-- Patient info -->
     <app-patient-info [appointment]="appointment()!" />
 
     <!-- Type-specific form -->

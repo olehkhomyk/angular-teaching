@@ -2,16 +2,23 @@
 
   <!-- Left column: appointment list -->
   <section class="list-column">
-    <mat-card appearance="outlined">
-      <mat-card-header>
-        <mat-card-title>Прийоми пацієнтів</mat-card-title>
-        <mat-card-subtitle>Тиждень</mat-card-subtitle>
-      </mat-card-header>
+    <div class="panel">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">Прийоми пацієнтів</h2>
+          <p class="panel-subtitle">Поточний тиждень</p>
+        </div>
+        <div class="appt-count">
+          @if (!isLoading()) {
+            <span class="count-badge">{{ appointments().length }}</span>
+          }
+        </div>
+      </div>
 
-      <mat-card-content>
+      <div class="panel-body">
         @if (isLoading()) {
           <div class="spinner-wrap">
-            <mat-progress-spinner mode="indeterminate" diameter="48" />
+            <mat-progress-spinner mode="indeterminate" diameter="40" />
           </div>
         } @else {
           <app-patient-list
@@ -20,27 +27,25 @@
             (selectAppointment)="onSelectAppointment($event)"
           />
         }
-      </mat-card-content>
-    </mat-card>
+      </div>
+    </div>
   </section>
 
   <!-- Right column -->
   <section class="detail-column">
-    <mat-card appearance="outlined" class="detail-card">
-
+    <div class="panel detail-panel">
       @if (selectedAppointment(); as appt) {
         <app-appointment-preview [appointment]="appt" />
       } @else {
-        <mat-card-content>
-          <div class="empty-state">
+        <div class="empty-state">
+          <div class="empty-icon-wrap">
             <mat-icon class="empty-icon">touch_app</mat-icon>
-            <h2>Оберіть прийом</h2>
-            <p>Натисніть на рядок зліва, щоб побачити деталі</p>
           </div>
-        </mat-card-content>
+          <h2 class="empty-title">Оберіть прийом</h2>
+          <p class="empty-sub">Натисніть на рядок зліва, щоб побачити деталі пацієнта</p>
+        </div>
       }
-
-    </mat-card>
+    </div>
   </section>
 
 </div>

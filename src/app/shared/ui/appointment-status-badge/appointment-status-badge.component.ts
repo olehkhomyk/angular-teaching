@@ -8,10 +8,11 @@ import { AppointmentStatus } from '../../../core/models/patient.model';
   imports: [MatChipsModule],
   templateUrl: './appointment-status-badge.component.html',
   styles: [`
-    .chip-in-progress { --mdc-chip-label-text-color: #e65100; --mdc-chip-container-color: #fff3e0; }
-    .chip-completed   { --mdc-chip-label-text-color: #2e7d32; --mdc-chip-container-color: #e8f5e9; }
-    .chip-cancelled   { --mdc-chip-label-text-color: #c62828; --mdc-chip-container-color: #ffebee; }
-    .chip-scheduled   { --mdc-chip-label-text-color: #1565c0; --mdc-chip-container-color: #e3f2fd; }
+    mat-chip { font-size: 11px !important; font-weight: 700 !important; height: 22px !important; border-radius: 6px !important; letter-spacing: 0.2px; }
+    .chip-scheduled   { --mdc-chip-label-text-color: #1d4ed8; --mdc-chip-container-color: #dbeafe; }
+    .chip-in-progress { --mdc-chip-label-text-color: #c2410c; --mdc-chip-container-color: #ffedd5; }
+    .chip-completed   { --mdc-chip-label-text-color: #166534; --mdc-chip-container-color: #dcfce7; }
+    .chip-cancelled   { --mdc-chip-label-text-color: #991b1b; --mdc-chip-container-color: #fee2e2; }
   `],
 })
 export class AppointmentStatusBadgeComponent {

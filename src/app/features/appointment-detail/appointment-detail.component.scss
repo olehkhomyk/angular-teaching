@@ -6,38 +6,69 @@
 }
 
 .detail-layout {
-  max-width: 860px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 16px;
+  padding: 20px 16px;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
 .detail-header {
+  background: white;
+  border-radius: 16px;
+  padding: 20px 24px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px 0;
+  gap: 16px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.06), 0 4px 16px rgb(0 0 0 / 0.05);
+}
+
+.back-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.12s;
+  flex-shrink: 0;
+  color: #475569;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+  }
 }
 
 .header-info {
   flex: 1;
+  min-width: 0;
 }
 
 .patient-name {
-  margin: 0;
-  font: var(--mat-sys-headline-small);
-  color: var(--mat-sys-on-surface);
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.3px;
 }
 
 .header-meta {
   display: flex;
   align-items: center;
   gap: 6px;
-  font: var(--mat-sys-body-medium);
-  color: var(--mat-sys-on-surface-variant);
-  margin-top: 2px;
+  font-size: 13px;
+  color: #64748b;
   flex-wrap: wrap;
 }
 
@@ -57,12 +88,13 @@
     font-size: 64px;
     width: 64px;
     height: 64px;
-    color: var(--mat-sys-outline);
+    color: #94a3b8;
   }
 
   p {
-    font: var(--mat-sys-title-large);
-    color: var(--mat-sys-on-surface-variant);
+    font-size: 18px;
+    font-weight: 600;
+    color: #64748b;
     margin: 0;
   }
 }

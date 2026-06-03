@@ -1,64 +1,81 @@
-<mat-card-header>
-  <mat-icon matCardAvatar>person</mat-icon>
-  <mat-card-title>
-    {{ appointment().patient.firstName }} {{ appointment().patient.lastName }}
-  </mat-card-title>
-  <mat-card-subtitle>
-    {{ appointment().patient.age }} р. · {{ appointment().patient.insuranceNumber }}
-  </mat-card-subtitle>
-</mat-card-header>
-
-<mat-card-content class="preview-content">
-  <mat-divider />
-
-  <div class="preview-row">
-    <mat-icon class="preview-icon">medical_services</mat-icon>
+<!-- Header -->
+<div class="preview-header">
+  <div class="preview-avatar-row">
+    <div class="preview-avatar">
+      <mat-icon>person</mat-icon>
+    </div>
     <div>
-      <div class="preview-label">Лікар</div>
-      <div class="preview-value">{{ appointment().doctorName }}</div>
+      <p class="preview-name">
+        {{ appointment().patient.firstName }} {{ appointment().patient.lastName }}
+      </p>
+      <p class="preview-sub">
+        {{ appointment().patient.age }} р. · {{ appointment().patient.insuranceNumber }}
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Scrollable body -->
+<div class="preview-body">
+
+  <!-- Info chips -->
+  <div class="info-chip-row">
+    <div class="info-chip">
+      <mat-icon>medical_services</mat-icon>
+      <div>
+        <span class="chip-label">Лікар</span>
+        <span class="chip-value">{{ appointment().doctorName }}</span>
+      </div>
+    </div>
+
+    <div class="info-chip">
+      <mat-icon>meeting_room</mat-icon>
+      <div>
+        <span class="chip-label">Кабінет</span>
+        <span class="chip-value">{{ appointment().room }}</span>
+      </div>
+    </div>
+
+    <div class="info-chip">
+      <mat-icon>schedule</mat-icon>
+      <div>
+        <span class="chip-label">Дата і час</span>
+        <span class="chip-value">{{ appointment().date | date: 'dd MMM, HH:mm' }}</span>
+      </div>
+    </div>
+
+    <div class="info-chip">
+      <mat-icon>category</mat-icon>
+      <div>
+        <span class="chip-label">Тип</span>
+        <span class="chip-value">{{ typeLabel(appointment().type) }}</span>
+      </div>
+    </div>
+
+    <div class="info-chip">
+      <mat-icon>flag</mat-icon>
+      <div>
+        <span class="chip-label">Статус</span>
+        <app-appointment-status-badge [status]="appointment().status" />
+      </div>
     </div>
   </div>
 
-  <div class="preview-row">
-    <mat-icon class="preview-icon">meeting_room</mat-icon>
-    <div>
-      <div class="preview-label">Кабінет</div>
-      <div class="preview-value">{{ appointment().room }}</div>
+  <!-- Previous notes -->
+  <div class="notes-block">
+    <div class="notes-label">
+      <mat-icon>history_edu</mat-icon>
+      Попередні нотатки
     </div>
+    <p class="notes-text">{{ appointment().previousNotes }}</p>
   </div>
 
-  <div class="preview-row">
-    <mat-icon class="preview-icon">schedule</mat-icon>
-    <div>
-      <div class="preview-label">Дата та час</div>
-      <div class="preview-value">{{ appointment().date | date: 'dd MMM yyyy, HH:mm' }}</div>
-    </div>
-  </div>
+</div>
 
-  <div class="preview-row">
-    <mat-icon class="preview-icon">category</mat-icon>
-    <div>
-      <div class="preview-label">Тип</div>
-      <div class="preview-value">{{ typeLabel(appointment().type) }}</div>
-    </div>
-  </div>
-
-  <div class="preview-row">
-    <mat-icon class="preview-icon">flag</mat-icon>
-    <div>
-      <div class="preview-label">Статус</div>
-      <app-appointment-status-badge [status]="appointment().status" />
-    </div>
-  </div>
-
-  <mat-divider />
-
-  <p class="preview-notes">{{ appointment().previousNotes }}</p>
-</mat-card-content>
-
-<mat-card-actions align="end">
-  <button mat-flat-button [routerLink]="['/appointment', appointment().id]">
+<!-- Footer with action -->
+<div class="preview-footer">
+  <a class="edit-btn" [routerLink]="['/appointment', appointment().id]">
     <mat-icon>edit</mat-icon>
     Редагувати прийом
-  </button>
-</mat-card-actions>
+  </a>
+</div>
