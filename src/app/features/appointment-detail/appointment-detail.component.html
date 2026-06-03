@@ -5,31 +5,24 @@
 } @else if (appointment()) {
   <div class="detail-layout">
 
-    <!-- Header -->
-    <div class="detail-header">
-      <button class="back-btn" routerLink="/dashboard" aria-label="Назад">
-        <mat-icon>arrow_back</mat-icon>
-      </button>
-      <div class="header-info">
-        <h1 class="patient-name">
-          {{ appointment()!.patient.firstName }} {{ appointment()!.patient.lastName }}
-        </h1>
-        <div class="header-meta">
-          <span>{{ appointment()!.doctorName }}</span>
-          <span class="dot">·</span>
-          <span>Кабінет {{ appointment()!.room }}</span>
-          <span class="dot">·</span>
-          <span>{{ appointment()!.date | date: 'dd MMM yyyy, HH:mm' }}</span>
-        </div>
-      </div>
-      <app-appointment-status-badge [status]="appointment()!.status" />
-    </div>
+    <app-appointment-header
+      [appointment]="appointment()!"
+      [isEditing]="isEditing()"
+      (editClick)="startEditing()"
+      (cancelClick)="cancelEditing()"
+    />
 
-    <!-- Patient info -->
-    <app-patient-info [appointment]="appointment()!" />
+    <app-patient-info
+      [appointment]="appointment()!"
+      [isEditing]="isEditing()"
+      (save)="savePatientInfo($event)"
+    />
 
-    <!-- Type-specific form -->
-    <app-appointment-form [appointment]="appointment()!" />
+    <app-appointment-form
+      [appointment]="appointment()!"
+      [isEditing]="isEditing()"
+      (save)="saveAppointment($event)"
+    />
 
   </div>
 } @else {

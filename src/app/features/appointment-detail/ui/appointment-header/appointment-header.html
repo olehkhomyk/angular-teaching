@@ -1,0 +1,29 @@
+<div class="detail-header">
+  <button class="back-btn" routerLink="/dashboard" aria-label="Назад">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <div class="header-info">
+    <h1 class="patient-name">
+      {{ appointment().patient.firstName }} {{ appointment().patient.lastName }} ({{ appointment().patient.age }} р.)
+    </h1>
+    <div class="header-meta">
+      <span>{{ appointment().doctorName }}</span>
+      <span class="dot">·</span>
+      <span>Кабінет {{ appointment().room }}</span>
+      <span class="dot">·</span>
+      <span>{{ appointment().date | date: 'dd MMM yyyy, HH:mm' }}</span>
+    </div>
+  </div>
+  <app-appointment-status-badge [status]="appointment().status" />
+  @if (!isEditing()) {
+    <button mat-stroked-button (click)="editClick.emit()">
+      <mat-icon>edit</mat-icon>
+      Редагувати
+    </button>
+  } @else {
+    <button mat-stroked-button (click)="cancelClick.emit()">
+      <mat-icon>close</mat-icon>
+      Скасувати
+    </button>
+  }
+</div>

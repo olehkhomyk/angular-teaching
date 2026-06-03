@@ -1,10 +1,9 @@
-<mat-card appearance="outlined" [formGroup]="patientInfoForm">
+<mat-card appearance="outlined" [formGroup]="form">
   <mat-card-header>
     <mat-icon matCardAvatar>person</mat-icon>
     <mat-card-title>
-      {{ appointment().patient.firstName }} {{ appointment().patient.lastName }}
+     Картка пацієнта
     </mat-card-title>
-    <mat-card-subtitle>{{ appointment().patient.age }} р.</mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content class="info-grid">
@@ -34,7 +33,7 @@
     <!-- Allergies -->
     <mat-form-field appearance="outline">
       <mat-label>Алергії</mat-label>
-      <mat-select multiple formControlName="selectedAllergies">
+      <mat-select multiple formControlName="allergies">
         @for (allergy of allergyOptions; track allergy) {
           <mat-option [value]="allergy">{{ allergy }}</mat-option>
         }
@@ -62,6 +61,14 @@
         Згода підписана
       </mat-slide-toggle>
     </div>
-
   </mat-card-content>
+
+  @if (isEditing()) {
+    <mat-card-actions align="end">
+      <button mat-flat-button (click)="onSave()">
+        <mat-icon>save</mat-icon>
+        Зберегти
+      </button>
+    </mat-card-actions>
+  }
 </mat-card>
