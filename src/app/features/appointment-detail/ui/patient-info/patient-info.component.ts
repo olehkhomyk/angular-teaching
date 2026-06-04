@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, output, signal } from '@angular/core';
+import { Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -25,7 +25,7 @@ import { Appointment, PatientInfoForm, PatientType } from '../../../../core/mode
   templateUrl: './patient-info.component.html',
   styleUrl: './patient-info.component.scss',
 })
-export class PatientInfoComponent {
+export class PatientInfoComponent implements OnInit {
   appointment = input.required<Appointment>();
 
   save = output<PatientInfoForm>();
@@ -33,57 +33,55 @@ export class PatientInfoComponent {
   private fb = inject(FormBuilder);
 
   readonly allergyOptions = ['Пеніцилін', 'Латекс', 'Йод', 'Немає'];
+  readonly PatientTypeEnum: typeof PatientType = PatientType;
 
   patientType = computed<PatientType>(() => this.appointment().patient.patientType);
 
   isEditing = signal(false);
 
-  form: FormGroup = this.buildForm()
+  form!: FormGroup;
 
   private snapshot: ReturnType<typeof this.form.getRawValue> | null = null;
 
-  constructor() {
-    this.form.disable();
+  ngOnInit(): void {
+    this.buildForm();
+    this.editableControls.forEach(name => this.form.get(name)?.disable());
   }
 
   startEditing(): void {
     this.snapshot = this.form.getRawValue();
-    this.form.enable();
+    this.editableControls.forEach(name => this.form.get(name)?.enable());
     this.isEditing.set(true);
   }
 
   cancelEditing(): void {
     if (this.snapshot) this.form.reset(this.snapshot);
-    this.form.disable();
+    this.editableControls.forEach(name => this.form.get(name)?.disable());
     this.isEditing.set(false);
   }
 
   onSave(): void {
-    this.save.emit(this.form.value);
-    this.form.disable();
+    this.save.emit(this.form.getRawValue());
+    this.editableControls.forEach(name => this.form.get(name)?.disable());
     this.isEditing.set(false);
   }
 
-  buildForm(): any {
-    switch (this.patientType()) {
-      case PatientType.Military:
-        return this.fb.group({
-        isPresent: [false],
-        consentSigned: [false],
-        temperature: [null as number | null],
-        allergies: [[] as string[]],
-        combatInjuries: [''],
-        psychologicalState: [''],
-      });
-      default:
-        return this.fb.group({
-          isPresent: [false],
-          consentSigned: [false],
-          temperature: [null as number | null],
-          allergies: [[] as string[]],
-          combatInjuries: [''],
-          psychologicalState: [''],
-        });
-    }
-  };
+  private readonly editableControls = [
+    'isPresent', 'consentSigned', 'temperature', 'allergies',
+    'combatInjuries', 'psychologicalState',
+  ];
+
+  buildForm(): void {
+    const a = this.appointment();
+    this.form = this.fb.group({
+      insuranceNumber: [{ value: a.patient.insuranceNumber, disabled: true }],
+      previousNotes: [{ value: a.previousNotes, disabled: true }],
+      isPresent: [false],
+      consentSigned: [false],
+      temperature: [null as number | null],
+      allergies: [[] as string[]],
+      combatInjuries: [''],
+      psychologicalState: [''],
+    });
+  }
 }

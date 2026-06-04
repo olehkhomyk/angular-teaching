@@ -5,7 +5,7 @@
       Картка пацієнта
     </mat-card-title>
 
-    @if (patientType() === 'military') {
+    @if (patientType() === PatientTypeEnum.Military) {
       <span class="ml-auto px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 border border-yellow-400 self-baseline">
         🪖 Військовий
       </span>
@@ -17,7 +17,7 @@
     <!-- Insurance number (readonly) -->
     <mat-form-field appearance="outline">
       <mat-label>Номер страховки</mat-label>
-      <input matInput [value]="appointment().patient.insuranceNumber" readonly />
+      <input matInput formControlName="insuranceNumber" />
       <mat-icon matSuffix>shield</mat-icon>
     </mat-form-field>
 
@@ -46,19 +46,14 @@
       </mat-select>
     </mat-form-field>
 
-    <!-- Previous notes (readonly textarea) -->
+    <!-- Previous notes (readonly) -->
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Попередні нотатки</mat-label>
-      <textarea
-        matInput
-        rows="3"
-        readonly
-        [value]="appointment().previousNotes"
-      ></textarea>
+      <textarea matInput rows="3" formControlName="previousNotes"></textarea>
     </mat-form-field>
 
     <!-- MILITARY: extra block -->
-    @if (patientType() === 'military') {
+    @if (patientType() === PatientTypeEnum.Military) {
       <mat-form-field appearance="outline" class="full-width military-field">
         <mat-label>Бойові травми / поранення</mat-label>
         <textarea matInput rows="1" placeholder="Опишіть характер поранень..." formControlName="combatInjuries"></textarea>
