@@ -4,13 +4,10 @@
   </div>
 } @else if (appointment()) {
   <div class="detail-layout">
-
     <app-appointment-header [appointment]="appointment()!" />
 
-    <app-patient-info
-      [appointment]="appointment()!"
-      (save)="savePatientInfo($event)"
-    />
+    <app-patient-info [appointment]="appointment()!"
+                      (save)="savePatientInfo($event)" />
 
     <app-appointment-form [appointment]="appointment()!" (save)="saveAppointment($event)" />
   </div>

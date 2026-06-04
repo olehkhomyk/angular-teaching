@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, output } from '@angular/core';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -36,17 +36,9 @@ export class PatientInfoComponent {
 
   patientType = computed<PatientType>(() => this.appointment().patient.patientType);
 
-  isEditing = false;
+  isEditing = signal(false);
 
-  form: FormGroup = this.fb.group({
-    isPresent: [false],
-    consentSigned: [false],
-    temperature: [null as number | null],
-    allergies: [[] as string[]],
-    combatInjuries: [''],
-    psychologicalState: [''],
-    evacuationCardSigned: [false],
-  });
+  form: FormGroup = this.buildForm()
 
   private snapshot: ReturnType<typeof this.form.getRawValue> | null = null;
 
@@ -57,46 +49,41 @@ export class PatientInfoComponent {
   startEditing(): void {
     this.snapshot = this.form.getRawValue();
     this.form.enable();
-    this.isEditing = true;
+    this.isEditing.set(true);
   }
 
   cancelEditing(): void {
     if (this.snapshot) this.form.reset(this.snapshot);
     this.form.disable();
-    this.isEditing = false;
+    this.isEditing.set(false);
   }
 
   onSave(): void {
-    this.save.emit(this.buildPayload());
+    this.save.emit(this.form.value);
     this.form.disable();
-    this.isEditing = false;
+    this.isEditing.set(false);
   }
 
-  private buildPayload(): PatientInfoForm {
-    const v = this.form.getRawValue();
-    const base = {
-      patientType: this.patientType(),
-      isPresent: v.isPresent,
-      allergies: v.allergies,
-      temperature: v.temperature,
-      consentSigned: v.consentSigned,
-    };
-
+  buildForm(): any {
     switch (this.patientType()) {
       case PatientType.Military:
-        return {
-          ...base,
-          combatInjuries: v.combatInjuries,
-          psychologicalState: v.psychologicalState,
-          evacuationCardSigned: v.evacuationCardSigned,
-        };
+        return this.fb.group({
+        isPresent: [false],
+        consentSigned: [false],
+        temperature: [null as number | null],
+        allergies: [[] as string[]],
+        combatInjuries: [''],
+        psychologicalState: [''],
+      });
       default:
-        return base;
+        return this.fb.group({
+          isPresent: [false],
+          consentSigned: [false],
+          temperature: [null as number | null],
+          allergies: [[] as string[]],
+          combatInjuries: [''],
+          psychologicalState: [''],
+        });
     }
-  }
-
-  // TODO: refactor — abstract BasePatientInfoComponent
-  // TODO: MilitaryPatientInfoComponent extends Base
-  // TODO: ChildPatientInfoComponent extends Base
-  // TODO: PatientInfoHostComponent — dynamically resolves correct child via NgComponentOutlet
+  };
 }

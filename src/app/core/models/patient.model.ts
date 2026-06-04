@@ -39,7 +39,6 @@ export interface PatientInfoForm {
   // military only
   combatInjuries?: string;
   psychologicalState?: string;
-  evacuationCardSigned?: boolean;
 }
 
 export interface ConsultationForm {

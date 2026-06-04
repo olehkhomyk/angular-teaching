@@ -61,13 +61,13 @@
     @if (patientType() === 'military') {
       <mat-form-field appearance="outline" class="full-width military-field">
         <mat-label>Бойові травми / поранення</mat-label>
-        <textarea matInput rows="2" placeholder="Опишіть характер поранень..." formControlName="combatInjuries"></textarea>
+        <textarea matInput rows="1" placeholder="Опишіть характер поранень..." formControlName="combatInjuries"></textarea>
         <mat-icon matPrefix>emergency</mat-icon>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width military-field">
         <mat-label>Психологічний стан</mat-label>
-        <textarea matInput rows="2" placeholder="Психоемоційний стан на момент огляду..." formControlName="psychologicalState"></textarea>
+        <textarea matInput rows="1" placeholder="Психоемоційний стан на момент огляду..." formControlName="psychologicalState"></textarea>
         <mat-icon matPrefix>psychology</mat-icon>
       </mat-form-field>
     }
@@ -81,17 +81,11 @@
       <mat-slide-toggle formControlName="consentSigned">
         Згода підписана
       </mat-slide-toggle>
-
-      @if (patientType() === 'military') {
-        <mat-slide-toggle formControlName="evacuationCardSigned">
-          Евакуаційна картка підписана
-        </mat-slide-toggle>
-      }
     </div>
   </mat-card-content>
 
   <mat-card-actions align="end">
-    @if (!isEditing) {
+    @if (!isEditing()) {
       <button mat-stroked-button (click)="startEditing()">
         <mat-icon>edit</mat-icon>
         Редагувати

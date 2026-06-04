@@ -1,0 +1,11 @@
+.filter-bar {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 8px 0 4px;
+}
+
+.filter-field {
+  flex: 1;
+  min-width: 160px;
+}

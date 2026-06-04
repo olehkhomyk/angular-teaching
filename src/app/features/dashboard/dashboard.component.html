@@ -10,10 +10,12 @@
         </div>
         <div class="appt-count">
           @if (!isLoading()) {
-            <span class="count-badge">{{ appointments().length }}</span>
+            <span class="count-badge">{{ filteredAppointments().length }}</span>
           }
         </div>
       </div>
+
+      <app-appointments-filter (filterChange)="onFilterChange($event)" />
 
       <div class="panel-body">
         @if (isLoading()) {
@@ -22,7 +24,7 @@
           </div>
         } @else {
           <app-patient-list
-            [appointments]="appointments()"
+            [appointments]="filteredAppointments()"
             [selectedId]="selectedAppointmentId()"
             (selectAppointment)="onSelectAppointment($event)"
           />

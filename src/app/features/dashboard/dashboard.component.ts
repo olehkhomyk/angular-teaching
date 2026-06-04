@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { AppointmentsService } from '../../core/services/appointments.service';
 import { PatientListComponent } from './ui/patient-list/patient-list.component';
 import { AppointmentPreviewComponent } from './ui/appointment-preview/appointment-preview.component';
+import { AppointmentsFilterComponent, AppointmentsFilter } from './ui/appointments-filter/appointments-filter.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,6 +17,7 @@ import { AppointmentPreviewComponent } from './ui/appointment-preview/appointmen
     MatIconModule,
     PatientListComponent,
     AppointmentPreviewComponent,
+    AppointmentsFilterComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -30,6 +32,16 @@ export class DashboardComponent {
 
   isLoading = computed(() => this.appointments().length === 0);
 
+  filter = signal<AppointmentsFilter>({ appointmentType: null, patientType: null });
+
+  filteredAppointments = computed(() => {
+    const { appointmentType, patientType } = this.filter();
+    return this.appointments().filter(a =>
+      (!appointmentType || a.type === appointmentType) &&
+      (!patientType || a.patient.patientType === patientType),
+    );
+  });
+
   selectedAppointmentId = signal<string | null>(null);
 
   selectedAppointment = computed(() =>
@@ -38,5 +50,10 @@ export class DashboardComponent {
 
   onSelectAppointment(id: string): void {
     this.selectedAppointmentId.set(id);
+  }
+
+  onFilterChange(f: AppointmentsFilter): void {
+    this.filter.set(f);
+    this.selectedAppointmentId.set(null);
   }
 }
