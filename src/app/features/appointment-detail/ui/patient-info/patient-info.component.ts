@@ -45,43 +45,52 @@ export class PatientInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.buildForm();
-    this.editableControls.forEach(name => this.form.get(name)?.disable());
   }
 
   startEditing(): void {
     this.snapshot = this.form.getRawValue();
-    this.editableControls.forEach(name => this.form.get(name)?.enable());
+    this.form.enable();
     this.isEditing.set(true);
   }
 
   cancelEditing(): void {
-    if (this.snapshot) this.form.reset(this.snapshot);
-    this.editableControls.forEach(name => this.form.get(name)?.disable());
+    if (this.snapshot) {
+      this.form.reset(this.snapshot);
+    }
+
+    this.form.disable();
     this.isEditing.set(false);
   }
 
   onSave(): void {
     this.save.emit(this.form.getRawValue());
-    this.editableControls.forEach(name => this.form.get(name)?.disable());
+    this.form.disable();
     this.isEditing.set(false);
   }
 
-  private readonly editableControls = [
-    'isPresent', 'consentSigned', 'temperature', 'allergies',
-    'combatInjuries', 'psychologicalState',
-  ];
-
-  buildForm(): void {
-    const a = this.appointment();
-    this.form = this.fb.group({
-      insuranceNumber: [{ value: a.patient.insuranceNumber, disabled: true }],
-      previousNotes: [{ value: a.previousNotes, disabled: true }],
-      isPresent: [false],
-      consentSigned: [false],
-      temperature: [null as number | null],
-      allergies: [[] as string[]],
-      combatInjuries: [''],
-      psychologicalState: [''],
-    });
+  buildForm(): any {
+    switch (this.patientType()) {
+      case PatientType.Military:
+        this.form = this.fb.group({
+          isPresent: [false],
+          consentSigned: [false],
+          temperature: [null as number | null],
+          allergies: [[] as string[]],
+          combatInjuries: [''],
+          psychologicalState: [''],
+        });
+        break;
+      default:
+        this.form = this.fb.group({
+          isPresent: [false],
+          consentSigned: [false],
+          temperature: [null as number | null],
+          allergies: [[] as string[]],
+          combatInjuries: [''],
+          psychologicalState: [''],
+        });
+        break;
+    }
+    this.form.disable();
   }
 }
