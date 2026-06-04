@@ -32,13 +32,14 @@ export class DashboardComponent {
 
   isLoading = computed(() => this.appointments().length === 0);
 
-  filter = signal<AppointmentsFilter>({ appointmentType: null, patientType: null });
+  filter = signal<AppointmentsFilter>({ appointmentType: null, patientType: null, status: null });
 
   filteredAppointments = computed(() => {
-    const { appointmentType, patientType } = this.filter();
+    const { appointmentType, patientType, status } = this.filter();
     return this.appointments().filter(a =>
       (!appointmentType || a.type === appointmentType) &&
-      (!patientType || a.patient.patientType === patientType),
+      (!patientType || a.patient.patientType === patientType) &&
+      (!status || a.status === status),
     );
   });
 
