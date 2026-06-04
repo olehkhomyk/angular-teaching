@@ -1,5 +1,9 @@
 export type AppointmentStatus = 'scheduled' | 'in-progress' | 'completed' | 'cancelled';
-export type AppointmentType = 'consultation' | 'examination' | 'surgery';
+export enum AppointmentType {
+  Consultation = 'consultation',
+  Examination = 'examination',
+  Surgery = 'surgery',
+}
 export enum PatientType {
   Regular = 'regular',
   Military = 'military',

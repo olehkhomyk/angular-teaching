@@ -11,10 +11,8 @@ import { RouterLink } from '@angular/router';
 import { AppointmentsService } from '../../core/services/appointments.service';
 import { PatientInfoComponent } from './ui/patient-info/patient-info.component';
 import { AppointmentHeaderComponent } from './ui/appointment-header/appointment-header';
-import { ConsultationForm, ExaminationForm, PatientInfoForm, SurgeryForm } from '../../core/models/patient.model';
-import { ConsultationFormComponent } from './ui/consultation-form/consultation-form';
-import { ExaminationFormComponent } from './ui/examination-form/examination-form';
-import { SurgeryFormComponent } from './ui/surgery-form/surgery-form';
+import { AppointmentType, ConsultationForm, ExaminationForm, PatientInfoForm, SurgeryForm } from '../../core/models/patient.model';
+import { AppointmentFormComponent } from './ui/appointment-form/appointment-form';
 
 @Component({
   selector: 'app-appointment-detail',
@@ -26,9 +24,7 @@ import { SurgeryFormComponent } from './ui/surgery-form/surgery-form';
     RouterLink,
     PatientInfoComponent,
     AppointmentHeaderComponent,
-    ConsultationFormComponent,
-    ExaminationFormComponent,
-    SurgeryFormComponent,
+    AppointmentFormComponent,
   ],
   templateUrl: './appointment-detail.component.html',
   styleUrl: './appointment-detail.component.scss',

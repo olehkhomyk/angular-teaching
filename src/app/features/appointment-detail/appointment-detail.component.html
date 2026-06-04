@@ -12,17 +12,7 @@
       (save)="savePatientInfo($event)"
     />
 
-    @switch (type()) {
-      @case ('consultation') {
-        <app-consultation-form [appointment]="appointment()!" (save)="saveAppointment($event)" />
-      }
-      @case ('examination') {
-        <app-examination-form [appointment]="appointment()!" (save)="saveAppointment($event)" />
-      }
-      @case ('surgery') {
-        <app-surgery-form [appointment]="appointment()!" (save)="saveAppointment($event)" />
-      }
-    }
+    <app-appointment-form [appointment]="appointment()!" (save)="saveAppointment($event)" />
   </div>
 } @else {
   <div class="not-found">

@@ -1,4 +1,4 @@
-import { Appointment } from '../models/patient.model';
+import { Appointment, AppointmentType } from '../models/patient.model';
 import { PATIENTS_MOCK } from './patients.mock';
 
 const p = PATIENTS_MOCK;
@@ -18,7 +18,7 @@ export const APPOINTMENTS_MOCK: Appointment[] = [
     room: '101',
     date: d(-2, 9),
     status: 'completed',
-    type: 'consultation',
+    type: AppointmentType.Consultation,
     previousNotes:
       'Пацієнт скаржився на біль у горлі та підвищену температуру. Призначено антибіотики та жарознижуючі. Рекомендовано повторний огляд через 7 днів.',
   },
@@ -29,7 +29,7 @@ export const APPOINTMENTS_MOCK: Appointment[] = [
     room: '204',
     date: d(-1, 10, 30),
     status: 'completed',
-    type: 'examination',
+    type: AppointmentType.Examination,
     previousNotes:
       'Направлення на загальний аналіз крові та УЗД черевної порожнини. Пацієнт натще, підготовка проведена. Попередні результати в межах норми.',
   },
@@ -40,7 +40,7 @@ export const APPOINTMENTS_MOCK: Appointment[] = [
     room: '101',
     date: d(-1, 14),
     status: 'cancelled',
-    type: 'consultation',
+    type: AppointmentType.Consultation,
     previousNotes:
       'Плановий огляд скасовано за ініціативою пацієнта. Необхідно перепризначити прийом найближчим часом.',
   },
@@ -51,7 +51,7 @@ export const APPOINTMENTS_MOCK: Appointment[] = [
     room: '305',
     date: d(0, 8, 30),
     status: 'completed',
-    type: 'surgery',
+    type: AppointmentType.Surgery,
     previousNotes:
       'Планова операція на колінному суглобі (артроскопія). Пацієнт підготовлений, усі аналізи в нормі. Анестезіолог оглянутий вчора.',
   },
@@ -62,7 +62,7 @@ export const APPOINTMENTS_MOCK: Appointment[] = [
     room: '204',
     date: d(0, 10),
     status: 'in-progress',
-    type: 'examination',
+    type: AppointmentType.Examination,
     previousNotes:
       'МРТ шийного відділу хребта. Пацієнт скаржиться на хронічний біль у шиї протягом 3 місяців. Контрастне підсилення не потрібне.',
   },
@@ -73,7 +73,7 @@ export const APPOINTMENTS_MOCK: Appointment[] = [
     room: '101',
     date: d(0, 11, 30),
     status: 'in-progress',
-    type: 'consultation',
+    type: AppointmentType.Consultation,
     previousNotes:
       'Повторний прийом після курсу лікування гіпертонії. Пацієнт приймає Еналаприл 10 мг. АТ на попередньому огляді — 150/95.',
   },
@@ -84,7 +84,7 @@ export const APPOINTMENTS_MOCK: Appointment[] = [
     room: '305',
     date: d(0, 13),
     status: 'scheduled',
-    type: 'surgery',
+    type: AppointmentType.Surgery,
     previousNotes:
       'Лапароскопічне видалення жовчного міхура. Холецистит підтверджено УЗД. Пацієнт дотримується безжирової дієти вже 2 тижні.',
   },
@@ -95,7 +95,7 @@ export const APPOINTMENTS_MOCK: Appointment[] = [
     room: '112',
     date: d(1, 9),
     status: 'scheduled',
-    type: 'consultation',
+    type: AppointmentType.Consultation,
     previousNotes:
       'Первинний прийом. Направлення від сімейного лікаря з підозрою на бронхіт. Рекомендовано зробити рентген грудної клітки.',
   },
@@ -106,7 +106,7 @@ export const APPOINTMENTS_MOCK: Appointment[] = [
     room: '204',
     date: d(1, 11),
     status: 'scheduled',
-    type: 'examination',
+    type: AppointmentType.Examination,
     previousNotes:
       'ЕКГ та ехокардіографія. Пацієнт скаржиться на серцебиття та задишку при навантаженні. Попередня ЕКГ — 6 місяців тому, норма.',
   },
@@ -117,7 +117,7 @@ export const APPOINTMENTS_MOCK: Appointment[] = [
     room: '305',
     date: d(2, 8),
     status: 'scheduled',
-    type: 'surgery',
+    type: AppointmentType.Surgery,
     previousNotes:
       'Планова операція на щитоподібній залозі. МРТ та біопсія підтверджують доброякісний вузол. Ендокринолог дав дозвіл на операцію.',
   },
@@ -128,7 +128,7 @@ export const APPOINTMENTS_MOCK: Appointment[] = [
     room: '112',
     date: d(2, 10, 30),
     status: 'scheduled',
-    type: 'examination',
+    type: AppointmentType.Examination,
     previousNotes:
       'Контрольне обстеження після курсу лікування. Аналіз крові на гормони щитоподібної залози та загальний аналіз. Пацієнтка натще.',
   },
@@ -139,7 +139,7 @@ export const APPOINTMENTS_MOCK: Appointment[] = [
     room: '101',
     date: d(3, 9, 30),
     status: 'scheduled',
-    type: 'consultation',
+    type: AppointmentType.Consultation,
     previousNotes:
       'Повторний прийом після скасованого візиту. Скарги на головний біль та запаморочення. Необхідно перевірити АТ і призначити лікування.',
   },
@@ -150,7 +150,7 @@ export const APPOINTMENTS_MOCK: Appointment[] = [
     room: '305',
     date: d(3, 14),
     status: 'scheduled',
-    type: 'surgery',
+    type: AppointmentType.Surgery,
     previousNotes:
       'Повторна артроскопія правого плечового суглоба. Попередня операція 2 роки тому. Пацієнт скаржиться на обмежену рухливість після травми.',
   },
@@ -161,7 +161,7 @@ export const APPOINTMENTS_MOCK: Appointment[] = [
     room: '112',
     date: d(4, 9),
     status: 'scheduled',
-    type: 'examination',
+    type: AppointmentType.Examination,
     previousNotes:
       'УЗД органів черевної порожнини — контрольне після операції. Пацієнтка дотримується дієти, скарг немає. Шов загоюється добре.',
   },
@@ -172,7 +172,7 @@ export const APPOINTMENTS_MOCK: Appointment[] = [
     room: '204',
     date: d(4, 11, 30),
     status: 'scheduled',
-    type: 'consultation',
+    type: AppointmentType.Consultation,
     previousNotes:
       'Профілактичний огляд. Пацієнт без хронічних захворювань, остання госпіталізація — 5 років тому. Скарг немає.',
   },
