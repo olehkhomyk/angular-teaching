@@ -45,6 +45,11 @@ export class PatientInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.buildForm();
+    const a = this.appointment();
+    this.form.patchValue({
+      insuranceNumber: a.patient.insuranceNumber,
+      previousNotes: a.previousNotes,
+    });
   }
 
   startEditing(): void {
@@ -72,6 +77,8 @@ export class PatientInfoComponent implements OnInit {
     switch (this.patientType()) {
       case PatientType.Military:
         this.form = this.fb.group({
+          insuranceNumber: [{ value: '', disabled: true }],
+          previousNotes: [{ value: '', disabled: true }],
           isPresent: [false],
           consentSigned: [false],
           temperature: [null as number | null],
@@ -82,12 +89,12 @@ export class PatientInfoComponent implements OnInit {
         break;
       default:
         this.form = this.fb.group({
+          insuranceNumber: [{ value: '', disabled: true }],
+          previousNotes: [{ value: '', disabled: true }],
           isPresent: [false],
           consentSigned: [false],
           temperature: [null as number | null],
           allergies: [[] as string[]],
-          combatInjuries: [''],
-          psychologicalState: [''],
         });
         break;
     }
