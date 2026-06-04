@@ -4,12 +4,17 @@
   </div>
 } @else if (appointment()) {
   <div class="detail-layout">
-    <app-appointment-header [appointment]="appointment()!" />
+    @if (isLoading()) {
+      <div class="spinner-wrap">
+        <mat-progress-spinner mode="indeterminate" diameter="40" />
+      </div>
+    } @else {
+      <app-appointment-header [appointment]="appointment()!" />
+      <app-patient-info [appointment]="appointment()!"
+                        (save)="savePatientInfo($event)" />
+      <app-appointment-form [appointment]="appointment()!" (save)="saveAppointment($event)" />
+    }
 
-    <app-patient-info [appointment]="appointment()!"
-                      (save)="savePatientInfo($event)" />
-
-    <app-appointment-form [appointment]="appointment()!" (save)="saveAppointment($event)" />
   </div>
 } @else {
   <div class="not-found">

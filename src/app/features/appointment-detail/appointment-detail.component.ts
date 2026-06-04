@@ -1,7 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { switchMap, finalize } from 'rxjs/operators';
+import { switchMap, finalize, tap } from 'rxjs/operators';
 import { map } from 'rxjs';
 import { signal } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -11,7 +11,7 @@ import { RouterLink } from '@angular/router';
 import { AppointmentsService } from '../../core/services/appointments.service';
 import { PatientInfoComponent } from './ui/patient-info/patient-info.component';
 import { AppointmentHeaderComponent } from './ui/appointment-header/appointment-header';
-import { AppointmentType, ConsultationForm, ExaminationForm, PatientInfoForm, SurgeryForm } from '../../core/models/patient.model';
+import { ConsultationForm, ExaminationForm, PatientInfoForm, SurgeryForm } from '../../core/models/patient.model';
 import { AppointmentFormComponent } from './ui/appointment-form/appointment-form';
 
 @Component({
@@ -38,12 +38,16 @@ export class AppointmentDetailComponent {
   });
 
   appointment = toSignal(
-    toObservable(this.id).pipe(switchMap((id) => this.appointmentsService.getAppointmentById(id))),
+    toObservable(this.id).pipe(
+      tap(() => this.isLoading.set(true)),
+      switchMap((id) => this.appointmentsService.getAppointmentById(id)),
+      tap(() => this.isLoading.set(false)),
+    ),
     { initialValue: undefined },
   );
 
   type = computed(() => this.appointment()?.type);
-  isLoading = computed(() => this.appointment() === undefined);
+  isLoading = signal<boolean>(false);
 
   isSavingPatient = signal(false);
   isSavingForm = signal(false);
