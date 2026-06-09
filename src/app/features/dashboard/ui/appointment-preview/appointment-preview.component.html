@@ -13,6 +13,12 @@
       </p>
     </div>
   </div>
+  <div>
+    <a class="edit-btn" [routerLink]="['/appointment', appointment().id]">
+      <mat-icon>edit</mat-icon>
+      Деталі
+    </a>
+  </div>
 </div>
 
 <!-- Scrollable body -->
@@ -74,8 +80,4 @@
 
 <!-- Footer with action -->
 <div class="preview-footer">
-  <a class="edit-btn" [routerLink]="['/appointment', appointment().id]">
-    <mat-icon>edit</mat-icon>
-    Редагувати прийом
-  </a>
 </div>

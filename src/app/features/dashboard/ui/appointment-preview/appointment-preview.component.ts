@@ -2,8 +2,8 @@ import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { Appointment } from '../../../../core/models/patient.model';
-import { AppointmentStatusBadgeComponent } from '../../../../shared/ui/appointment-status-badge/appointment-status-badge.component';
+import { Appointment } from '@app/core/models/patient.model';
+import { AppointmentStatusBadgeComponent } from '@app/shared/ui/appointment-status-badge/appointment-status-badge.component';
 
 const TYPE_LABEL: Record<string, string> = {
   consultation: 'Консультація',
