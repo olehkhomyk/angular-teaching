@@ -3,7 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { AppointmentsService } from '../../core/services/appointments.service';
+import { AppointmentsService } from '@app/core/services/appointments.service';
 import { PatientListComponent } from './ui/patient-list/patient-list.component';
 import { AppointmentPreviewComponent } from './ui/appointment-preview/appointment-preview.component';
 import { AppointmentsFilterComponent, AppointmentsFilter } from './ui/appointments-filter/appointments-filter.component';

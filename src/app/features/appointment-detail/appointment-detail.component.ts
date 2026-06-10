@@ -8,11 +8,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
-import { AppointmentsService } from '../../core/services/appointments.service';
+import { AppointmentsService } from '@app/core/services/appointments.service';
 import { PatientInfoComponent } from './ui/patient-info/patient-info.component';
 import { AppointmentHeaderComponent } from './ui/appointment-header/appointment-header';
-import { ConsultationForm, ExaminationForm, PatientInfoForm, SurgeryForm } from '../../core/models/patient.model';
-import { AppointmentFormComponent } from './ui/appointment-form/appointment-form';
+import { ConsultationForm, ExaminationForm, PatientInfoForm, SurgeryForm } from '@app/core/models/patient.model';
 
 @Component({
   selector: 'app-appointment-detail',
@@ -23,8 +22,7 @@ import { AppointmentFormComponent } from './ui/appointment-form/appointment-form
     MatButtonModule,
     RouterLink,
     PatientInfoComponent,
-    AppointmentHeaderComponent,
-    AppointmentFormComponent,
+    AppointmentHeaderComponent
   ],
   templateUrl: './appointment-detail.component.html',
   styleUrl: './appointment-detail.component.scss',
